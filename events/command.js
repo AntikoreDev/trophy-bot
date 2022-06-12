@@ -1,4 +1,4 @@
-const { getServer, anyIn, color, emoji } = require("../globals");
+const { getServer, anyIn, color, emoji, isDev } = require("../globals");
 const Discord = require("discord.js");
 
 // Note from the developer, I hate interactions and the whole slash command system.
@@ -28,7 +28,7 @@ module.exports = {
 
 		if (!command) return;
 
-		if (command.permissions && !isAdmin) {
+		if (command.permissions && !(isAdmin || isDev(interaction.user.id))) {
 			for (const perm of command.permissions){
 				const permroles = client.db.guilds.get(`data.${guild.id}.permissions.${perm}`, []);
 				if (!anyIn(permroles, roles)) {
