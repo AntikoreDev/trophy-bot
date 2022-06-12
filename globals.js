@@ -291,7 +291,7 @@ function getPage(list, perPage, page = 1){
 	const parsed = clamp(page, 1, last);
 	return {
 		list: list.slice((parsed - 1) * perPage, parsed * perPage),
-		last: last,
+		last: Math.max(1, last),
 		page: parsed
 	};
 }
