@@ -1,5 +1,5 @@
 // This event runs whenever the bot is ready to start working!
-const { fetchModules } = require('../globals.js');
+const { fetchModules, changeActivity } = require('../globals.js');
 const path = require('path');
 
 module.exports = {
@@ -18,7 +18,9 @@ module.exports = {
 		console.log(`ID: ${client.user.id}`);
 
 		// Set the client user's activity.
-		client.user.setActivity(`0 awarded trophies!`, { type: 'WATCHING' });
+		client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`, 0)} awarded trophies!`, { type: 'WATCHING' });
+
+		changeActivity(client);
 
 		// Set the basic bot stuff
 		if (!client.db.bot.has(`data`)){
@@ -27,7 +29,9 @@ module.exports = {
 
 				defaultLanguage: 'en',
 				bannedUsers: [],
-				commands: {},
+				commands: {
+					total: 0
+				},
 				trophiesAwarded: 0,
 			});
 		}
