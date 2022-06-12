@@ -4,6 +4,7 @@ const { color, emoji: emojis, parseUser, downloadImage } = require('../../global
 
 module.exports = {
 	permissions: ['manage_trophies'],
+	cooldown: 10,
 	data: new SlashCommandBuilder()
 		.setName('create')
 		.setDescription('Create a new trophy for your server.')
@@ -23,7 +24,7 @@ module.exports = {
 		const desc = interaction.options?.get('description')?.value || 'No description provided';
 		const emoji = interaction.options?.get('emoji')?.value || ':trophy:';
 		const value = interaction.options?.get('value')?.value || 10;
-		const image = interaction.options?.getAttachment('image')?.url || null;
+		const image = interaction.options?.getAttachment('image') || null;
 		const dedic = interaction.options?.get('dedication')?.value || null;
 
 		const embed = new Discord.MessageEmbed();
@@ -64,19 +65,42 @@ module.exports = {
 
 		client.db.guilds.add(`data.${guild}.trophies.current`, 1);
 		const next = client.db.guilds.get(`data.${guild}.trophies.current`);
+
+		const extension = image ? image.name.split('.').pop() : null;
 		
 		client.db.guilds.set(`data.${guild}.trophies.${next}`, {
 			name,
 			description: desc,
 			emoji,
 			value,
-			image: `${guild}_${next}.png`,
+			image: image?.url ? `${guild}_${next}.${extension}` : null,
 			dedication
 		});
 
 		if (image) {
-			await downloadImage(image, `./images/${guild}_${next}.png`);
-			embed.setImage(image);
+			
+			if (!(['png', 'jpg', 'jpeg', 'gif'].includes(extension))) {
+				return interaction.reply({
+					embeds: [
+						new Discord.MessageEmbed()
+							.setColor(color.error)
+							.setDescription(`${emojis.error} The image must be a png, gif, jpg or jpeg.`)
+					]
+				});
+			}
+
+			if (image.size > 1000000){
+				return interaction.reply({
+					embeds: [
+						new Discord.MessageEmbed()
+							.setColor(color.error)
+							.setDescription(`${emojis.error} The image must not be larger than \`1 MB\``)
+					]
+				});
+			}
+			
+			await downloadImage(image?.url, `./images/${guild}_${next}.${extension}`);
+			embed.setImage(image?.url);
 		}
 
 		embed.addField(`ID`, `\u200b${next}`, true);

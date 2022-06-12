@@ -4,6 +4,7 @@ const { color, emoji: emojis, parseUser, getTrophy, downloadImage } = require('.
 
 module.exports = {
 	permissions: ['manage_trophies'],
+	cooldown: 10,
 	data: new SlashCommandBuilder()
 		.setName('edit')
 		.setDescription('Edit an existing trophy for your server.')
@@ -78,8 +79,29 @@ module.exports = {
 			});
 		}
 
+		const extension = image.name.split('.').pop();
 		if (image != current.image) {
-			await downloadImage(image, `./images/${guild}_${id}.png`);
+			if (!(['png', 'jpg', 'jpeg', 'gif'].includes(extension))) {
+				return interaction.reply({
+					embeds: [
+						new Discord.MessageEmbed()
+							.setColor(color.error)
+							.setDescription(`${emojis.error} The image must be a png, gif, jpg or jpeg.`)
+					]
+				});
+			}
+
+			if (image.size > 1000000){
+				return interaction.reply({
+					embeds: [
+						new Discord.MessageEmbed()
+							.setColor(color.error)
+							.setDescription(`${emojis.error} The image must not be larger than \`1 MB\``)
+					]
+				});
+			}
+			
+			await downloadImage(image, `./images/${guild}_${id}.${extension}`);
 		}
 		
 		client.db.guilds.set(`data.${guild}.trophies.${id}`, {
@@ -87,7 +109,7 @@ module.exports = {
 			description: desc,
 			emoji,
 			value,
-			image: `${guild}_${id}.png`,
+			image: image,
 			dedication
 		});
 
