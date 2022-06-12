@@ -30,7 +30,7 @@ module.exports = {
 
 		embed.setColor(color.success);
 		embed.setTitle(`${emojis.success} Sucessfully created trophy!`);
-		embed.setDescription(`${emoji} **${name}**\n\n${desc}`);
+		embed.setDescription(`${emoji} **${name}**\n${desc}`);
 		if (image) embed.setImage(image);
 		embed.addField('Value', `\u200b${value}`, true);
 
