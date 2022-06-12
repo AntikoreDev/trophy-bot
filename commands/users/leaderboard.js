@@ -31,7 +31,7 @@ module.exports = {
 		}
 
 
-		const sorted = list.sort((a, b) => b.value - a.value);
+		const sorted = list.sort((a, b) => b - a);
 		const pages = getPage(Array.from(sorted.keys()), 10, page);
 
 		let i = ((page - 1) * 10) + 1;
