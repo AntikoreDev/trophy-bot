@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { PermissionFlagsBits } = require('discord-api-types/v10');
 const Discord = require('discord.js');
 const { color, emoji, parseName, checkName } = require('../../globals');
 
@@ -11,7 +10,7 @@ const permissions = [
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('permissions')
-		.setDefaultMemberPermissions(PermissionFlagsBits.MANAGE_GUILD)
+		.setDefaultMemberPermissions("32")
 		.setDescription('Modify the permissions of a role.')
 		.addSubcommand(subcommand =>
 			subcommand
