@@ -32,7 +32,7 @@ module.exports = {
 		embed.setTitle(`${emojis.success} Sucessfully created trophy!`);
 		embed.setDescription(`${emoji} **${name}**\n${desc}`);
 		if (image) embed.setImage(image);
-		embed.addField('Value', `\u200b${value}`, true);
+		embed.addField('Value', `\u200b${value} :medal:`, true);
 
 		let dedication = {}
 
