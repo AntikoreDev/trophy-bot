@@ -17,6 +17,8 @@ module.exports = {
 		// If it's not a command, then WHY the heck is it here?
 		if (!interaction.isCommand()) return;
 
+		if (!client.commands) return;
+
 		const command = client.commands.get(interaction.commandName);
 		const user = await interaction.member.fetch();
 
