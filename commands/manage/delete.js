@@ -29,10 +29,20 @@ module.exports = {
 			});
 		}
 
-		const value = client.db.guilds.get(`data.${guild}.trophies.${id}`)?.value;
+		const object = client.db.guilds.get(`data.${guild}.trophies.${id}`);
+		const value = object?.value;
+		const name = object?.name;
+
 		client.db.guilds.delete(`data.${guild}.trophies.${id}`);
 
-		cleanseTrophies(client, guild, id, value);
+		// Remove trophy from the users who have it
+		await cleanseTrophies(client, guild, id, value);
 
+		embed.setColor(color.main);
+		embed.setDescription(`${emoji.success} Sucessfully **deleted** trophy \`${name}\``);
+
+		return interaction.reply({
+			embeds: [embed]
+		});
 	}
 }
