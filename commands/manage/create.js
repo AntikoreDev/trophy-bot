@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
-const { color, parseUser } = require('../../globals');
+const { color, emoji: emojis, parseUse, emojir } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_trophies'],
@@ -28,9 +28,9 @@ module.exports = {
 
 		const embed = new Discord.MessageEmbed();
 
-		embed.setColor(color.main);
+		embed.setColor(color.success);
 		embed.setTitle(`${emoji} ${name}`);
-		embed.setDescription(`\u200b${desc}`);
+		embed.setDescription(`${emojis.success} Sucessfully created trophy!\n\n${desc}`);
 		embed.setImage(image);
 		embed.addField('Value', `\u200b${value}`, true);
 
@@ -69,7 +69,7 @@ module.exports = {
 			description: desc,
 			emoji,
 			value,
-			image: image?.url,
+			image,
 			dedication
 		});
 
