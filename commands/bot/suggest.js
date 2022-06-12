@@ -3,6 +3,7 @@ const { color } = require('../../globals');
 const Discord = require('discord.js');
 
 module.exports = {
+	cooldown: 10,
 	data: new SlashCommandBuilder()
 		.setName('suggest')
 		.setDescription('Suggest a feature or change for the bot.')

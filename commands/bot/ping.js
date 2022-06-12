@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const { color } = require('../../globals');
 
 module.exports = {
+	cooldown: 3,
 	data: new SlashCommandBuilder()
 		.setName('ping')
 		.setDescription('Current bot ping! If the bot doesn\'t answer then ping is probably over 5000ms and very likely down'),

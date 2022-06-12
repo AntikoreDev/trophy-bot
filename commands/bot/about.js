@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const { color } = require('../../globals');
 
 module.exports = {
+	cooldown: 5,
 	data: new SlashCommandBuilder()
 		.setName('about')
 		.setDescription('Who am I? Who are you? Questions never asked.'),

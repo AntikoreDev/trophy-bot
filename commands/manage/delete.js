@@ -5,6 +5,7 @@ const fs = require('fs');
 
 module.exports = {
 	permissions: ['manage_trophies'],
+	cooldown: 10,
 	data: new SlashCommandBuilder()
 		.setName('delete')
 		.setDescription('Delete a trophy from your server.')
