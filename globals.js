@@ -12,9 +12,36 @@ const { Routes } = require('discord-api-types/v9');
 
 const color = {
 	main: "#0096FF",
-	error: "#FF6347",
+	error: "#E02D44",
 	success: "#32CD32",
 }
+
+// Settings
+const settings = [
+	{
+		name: 'Dedication Display',
+		description: 'How to display the dedication of a trophy when it is given.',
+		options: ['Always Mention', 'Always Name', 'Mention Only in Server'],
+		id: 'dedication_display',
+		default: 2,
+	},
+	{
+		name: 'Stack Roles',
+		id: 'stack_roles',
+		description: 'When true, the role rewards will stack instead of only adding the highest role reward at a time.',
+		options: ['Stack Roles', 'Only Highest Reward'],
+		default: 1,
+	}
+]
+
+// In very bad naming variables, please. discretion from the reader is thankful.
+function getSetting(client, guild, setting){
+	const stg = settings.find(x => x.id == setting);
+	if (!stg) return null;
+
+	const set = client.db.guilds.get(`data.${guild}.settings`, stg.default);
+	return set;
+};
 
 const emoji = {
 	trophy: "🏆",
@@ -60,9 +87,9 @@ async function getTrophy(client, guild, trophy){
 	return null;
 }
 
-async function parseName(trophy){
-	if (!trophy) return trophy;
-	return trophy.toLowerCase().replace(/\W/g, '').replace(/ /g, '');
+function parseName(text){
+	if (!text) return text;
+	return text.toLowerCase().replace(/\W/g, '').replace(/ /g, '');
 }
 
 function checkName(first, second){
@@ -349,11 +376,11 @@ module.exports = {
 	parseUser, parseName, clearMentions,
 
 	// Database
-	getTrophy, cleanseTrophies,
+	getTrophy, cleanseTrophies, getSetting,
 
 	// Comparison
 	checkName, anyIn,
 
 	// Colors, emojis, etc.
-	color, emoji, booleans, testingServers
+	color, emoji, booleans, testingServers, settings
 }
