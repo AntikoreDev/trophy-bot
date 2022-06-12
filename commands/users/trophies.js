@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 const { color, emoji, getPage, parseUser } = require('../../globals');
 
 module.exports = {
-	cooldown: 3,
 	data: new SlashCommandBuilder()
 		.setName('trophies')
 		.setDescription('See a list of trophies.')

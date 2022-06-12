@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 const { color, emoji, getTrophy } = require('../../globals');
 
 module.exports = {
-	cooldown: 5,
 	permissions: ['manage_users'],
 	data: new SlashCommandBuilder()
 		.setName('revoke')

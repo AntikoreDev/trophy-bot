@@ -9,7 +9,6 @@ const permissions = [
 ]
 
 module.exports = {
-	cooldown: 3,
 	data: new SlashCommandBuilder()
 		.setName('permissions')
 		.setDefaultMemberPermissions("32")

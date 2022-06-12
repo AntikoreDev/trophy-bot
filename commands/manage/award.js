@@ -4,7 +4,6 @@ const { color, emoji, getTrophy } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_users'],
-	cooldown: 3,
 	data: new SlashCommandBuilder()
 		.setName('award')
 		.setDescription('Award a trophy for an user.')

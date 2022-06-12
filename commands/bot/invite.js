@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 const { color } = require('../../globals');
 
 module.exports = {
-	cooldown: 5,
 	data: new SlashCommandBuilder()
 		.setName('invite')
 		.setDescription('Invite the bot to your server!'),

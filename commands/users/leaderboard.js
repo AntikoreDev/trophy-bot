@@ -3,7 +3,6 @@ const { color, emoji, getMedal, getPage } = require('../../globals');
 const Discord = require('discord.js');
 
 module.exports = {
-	cooldown: 3,
 	data: new SlashCommandBuilder()
 		.setName('leaderboard')
 		.setDescription('Shows the server\'s leaderboard.')

@@ -4,7 +4,6 @@ const { color, emoji: emojis, parseUser, getTrophy, downloadImage } = require('.
 
 module.exports = {
 	permissions: ['manage_trophies'],
-	cooldown: 10,
 	data: new SlashCommandBuilder()
 		.setName('edit')
 		.setDescription('Edit an existing trophy for your server.')
@@ -35,6 +34,47 @@ module.exports = {
 		// const value = interaction.options?.get('value')?.value || current.value;
 		const image = interaction.options?.getAttachment('image')?.url || current.image;
 		const dedic = interaction.options?.get('dedication')?.value || null;
+
+				// Error handling
+		// If name is too long
+		if (name.length > 32){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The name of the trophy is too long.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
+
+		// If desc is too long
+		if (desc.length > 128){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The description of the trophy is too long.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
+
+		// If emoji is too long
+		if (emoji.length > 16){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The emoji of the trophy is too long.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
+
+		// If the dedication is too long
+		if (dedic && dedic.length > 32){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The dedication of the trophy is too long.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
 
 		let dedication = current.dedication;
 
