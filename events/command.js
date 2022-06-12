@@ -44,6 +44,11 @@ module.exports = {
 			}
 		}
 
+		if (!client.db.bot.has(`data.commands.${interaction.commandName}`)) client.db.bot.set(`data.commands.${interaction.commandName}`, 0);
+
+		client.db.bot.add(`data.commands.${interaction.commandName}`, 1);
+		client.db.bot.add(`data.commands.total`, 1);
+
 		try {
 			await command.run(interaction);
 		} catch (error) {
