@@ -1,0 +1,37 @@
+{
+	"server_id": {
+		"trophies": {
+			"current": 3,
+			"1": {
+				"name": "Quiplash 2022",
+				"description": "You won the first trophy!",
+				"image": "example_url.png",
+				"icon": ":trophy:",
+				"value": 3
+			},
+			"2": {
+				"name": "Top Memes",
+				"description": "You are the top memer!",
+				"image": "example_url2.png",
+				"icon": ":Okayge:",
+				"value": 5
+			},
+			"3": {
+				"name": "Best 2022",
+				"description": "You are the top user!",
+				"image": "example_url3.png",
+				"icon": ":trophy:",
+				"value": 10
+			}
+		},
+		"users": {
+			"user_id": {
+				"trophies": [
+					"1",
+					"2"
+				],
+				"trophy_value": 8
+			}
+		}
+	}
+}
