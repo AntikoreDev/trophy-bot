@@ -9,7 +9,6 @@ module.exports = {
 		
 		// Import all the modules
 		client.commands 	= await fetchModules(path.join(__dirname, '../commands'), '.js', true);
-		client.categories 	= await fetchModules(path.join(__dirname, '../categories'));
 		client.languages 	= await fetchModules(path.join(__dirname, '../locale/languages'));
 		client.settings 	= await fetchModules(path.join(__dirname, '../settings'));
 

@@ -129,9 +129,13 @@ async function fetchModules(dir, ext = '.js', command = false, first = true){
 	if (command && first){
 		const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 
-		rest.put(Routes.applicationGuildCommands('985134052665356299', '985439832388042822'), { body: commands })
-			.then(() => console.log('Commands updated!'))
-			.catch(console.error);
+		for (const server of testingServers){
+			await rest.put(Routes.applicationGuildCommands('985134052665356299', server), { body: commands })
+				.then()
+				.catch(console.error);
+		}
+
+		console.log('Commands updated!');
 	}
 
 	collection.sort(a => a.name);
@@ -154,6 +158,11 @@ function isDev(id){
 function isBanned(id){
 	return false;
 }
+
+const testingServers = [
+	'985439832388042822',
+	'631540341148876800'
+]
 
 
 async function getServer(client, id, guild){
@@ -318,5 +327,5 @@ module.exports = {
 	checkName, anyIn,
 
 	// Colors, emojis, etc.
-	color, emoji, booleans
+	color, emoji, booleans, testingServers
 }
