@@ -1,5 +1,8 @@
 const Discord = require('discord.js');
+
+const request = require('request');
 const fs = require('fs');
+
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 
@@ -213,6 +216,17 @@ async function changeActivity(client){
 }
 
 
+
+function downloadImage(uri, filename, callback){
+	request.head(uri, function(err, res, body){
+		console.log('content-type:', res.headers['content-type']);
+		console.log('content-length:', res.headers['content-length']);
+
+		request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+	});
+};
+
+
 async function parseUser(client, ref, notfound = null, guild = null, member = false){
 
 	if (!ref || ref == ``) return notfound;
@@ -316,13 +330,13 @@ const booleans = {
 module.exports = {
 
 	// Fetching
-	fetchModules, getServer,
+	fetchModules, getServer, downloadImage,
 
 	// Technical
 	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric,
 
 	// Runtime
-	sleep, changeActivity,
+	sleep, changeActivity, 
 
 	// Output
 	showError, showSuccess, showCooldown,

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
-const { color, emoji: emojis, parseUse, emojir } = require('../../globals');
+const { color, emoji: emojis, parseUser, downloadImage } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_trophies'],
@@ -31,9 +31,10 @@ module.exports = {
 		embed.setColor(color.success);
 		embed.setTitle(`${emojis.success} Sucessfully created trophy!`);
 		embed.setDescription(`${emoji} **${name}**\n${desc}`);
-		if (image) embed.setImage(image);
+		
 		embed.addField('Value', `\u200b${value} :medal:`, true);
-
+		
+		
 		let dedication = {}
 
 		// If there is a dedicated user, set it, else, ignore it
@@ -69,9 +70,14 @@ module.exports = {
 			description: desc,
 			emoji,
 			value,
-			image,
+			image: `${guild}_${next}.png`,
 			dedication
 		});
+
+		if (image) {
+			await downloadImage(image, `${guild}_${next}.png`);
+			embed.setImage(`attachment://${guild}_${next}.png`);
+		}
 
 		embed.addField(`ID`, `\u200b${next}`, true);
 		if (dedication.name){
