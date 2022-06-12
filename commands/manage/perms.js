@@ -5,6 +5,7 @@ const { color, emoji, parseName, checkName } = require('../../globals');
 const permissions = [
 	'manageusers',
 	'managetrophies',
+	'managerewards'
 ]
 
 module.exports = {
@@ -16,14 +17,22 @@ module.exports = {
 			subcommand
 				.setName('add')
 				.setDescription('Add permissions to a role.')
-				.addStringOption(option => option.setName('permission').setDescription('Which permission you want to add. (Manage Users / Manage Trophies)').setRequired(true))
+				.addStringOption(option => option.setName('permission').setDescription('Which permission you want to add. (Manage Users / Manage Trophies)').setRequired(true).addChoices(
+					{ name: 'Manage Users', value: 'manageusers' },
+					{ name: 'Manage Trophies', value: 'managetrophies' },
+					{ name: 'Manage Rewards', value: 'managerewards' },
+				))
 				.addRoleOption(option => option.setName('target').setDescription('Which role you want to add permissions to.').setRequired(true))
 		)		
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('remove')
 				.setDescription('Remove permissions from a role.')
-				.addStringOption(option => option.setName('permission').setDescription('Which permission you want to add. (Manage Users / Manage Trophies)').setRequired(true))
+				.addStringOption(option => option.setName('permission').setDescription('Which permission you want to add. (Manage Users / Manage Trophies)').setRequired(true).addChoices(
+					{ name: 'Manage Users', value: 'manageusers' },
+					{ name: 'Manage Trophies', value: 'managetrophies' },
+					{ name: 'Manage Rewards', value: 'managerewards' },
+				))
 				.addRoleOption(option => option.setName('target').setDescription('Which role you want to add permissions to.').setRequired(true))
 		)
 		.addSubcommand(subcommand =>
@@ -46,11 +55,13 @@ module.exports = {
 			
 			const manageUsers = (dbperms?.manage_users || []).map(n => `<@&${n}>`);
 			const manageTrophies = (dbperms?.manage_trophies || []).map(n => `<@&${n}>`);
+			const manageRewards = (dbperms?.manage_rewards || []).map(n => `<@&${n}>`);
 
 			embed.setTitle('List of permissions');
 			embed.setColor(color.main);
 			embed.addField(`Manage Users`, manageUsers.length ? manageUsers.join(', ') : 'No permissions yet', true);
 			embed.addField(`Manage Trophies`, manageTrophies.length ? manageTrophies.join(', ') : 'No permissions yet', true);
+			embed.addField(`Manage Rewards`, manageRewards.length ? manageRewards.join(', ') : 'No permissions yet', true);
 
 			return interaction.reply({
 				embeds: [embed]
@@ -123,6 +134,38 @@ module.exports = {
 				}
 
 				dbperms.manage_trophies.splice(dbperms.manage_trophies.indexOf(target), 1);
+			}
+
+		}
+		else if (checkName(perm, 'managerewards')){
+		
+
+			if (subcommand == 'add'){		
+					
+				if (dbperms.manage_rewards.includes(target)){
+				
+					embed.setColor(color.error);
+					embed.setDescription(`${emoji.error} This role already has the permission \`${permission}\``);
+	
+					return interaction.reply({
+						embeds: [embed]
+					});
+				}
+
+				dbperms.manage_rewards.push(target);
+			}else{
+
+				if (!dbperms.manage_rewards.includes(target)){
+				
+					embed.setColor(color.error);
+					embed.setDescription(`${emoji.error} This role doesn't have permission \`${permission}\``);
+	
+					return interaction.reply({
+						embeds: [embed]
+					});
+				}
+
+				dbperms.manage_rewards.splice(dbperms.manage_rewards.indexOf(target), 1);
 			}
 		}else{
 
