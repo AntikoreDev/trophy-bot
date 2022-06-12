@@ -202,6 +202,15 @@ async function getServer(client, id, guild){
 	return server;
 }
 
+async function changeActivity(client){
+	await sleep(20000);
+	
+	// Set the client user's activity.
+	client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`, 0)} awarded trophies!`, { type: 'WATCHING' });
+	
+}
+
+
 async function parseUser(client, ref, notfound = null, guild = null, member = false){
 
 	if (!ref || ref == ``) return notfound;
@@ -311,7 +320,7 @@ module.exports = {
 	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric,
 
 	// Runtime
-	sleep,
+	sleep, changeActivity,
 
 	// Output
 	showError, showSuccess, showCooldown,
