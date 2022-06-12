@@ -4,7 +4,6 @@ const { color, emoji: emojis, parseUser, downloadImage } = require('../../global
 
 module.exports = {
 	permissions: ['manage_trophies'],
-	cooldown: 10,
 	data: new SlashCommandBuilder()
 		.setName('create')
 		.setDescription('Create a new trophy for your server.')
@@ -28,6 +27,58 @@ module.exports = {
 		const dedic = interaction.options?.get('dedication')?.value || null;
 
 		const embed = new Discord.MessageEmbed();
+
+		// Error handling
+		// If name is too long
+		if (name.length > 32){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The name of the trophy is too long.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
+
+		// If desc is too long
+		if (desc.length > 128){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The description of the trophy is too long.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
+
+		// If emoji is too long
+		if (emoji.length > 16){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The emoji of the trophy is too long.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
+
+		// If value is too big or too small
+		if (value > 99999999 || value < -99999999){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The value of the trophy is ${value > 0 ? `too big` : `too small`}.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
+
+		// If the dedication is too long
+		if (dedic && dedic.length > 32){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The dedication of the trophy is too long.`);
+
+			return interaction.reply({
+				embeds: [embed]
+			});
+		}
+
 
 		embed.setColor(color.success);
 		embed.setTitle(`${emojis.success} Sucessfully created trophy!`);
