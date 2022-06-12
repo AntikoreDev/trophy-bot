@@ -38,7 +38,7 @@ module.exports = {
 		// Remove trophy from the users who have it
 		await cleanseTrophies(client, guild, id, value);
 
-		embed.setColor(color.main);
+		embed.setColor(color.success);
 		embed.setDescription(`${emoji.success} Sucessfully **deleted** trophy \`${name}\``);
 
 		return interaction.reply({
