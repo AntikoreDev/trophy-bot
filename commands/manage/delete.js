@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
 const { color, emoji, getTrophy, cleanseTrophies } = require('../../globals');
+const fs = require('fs');
 
 module.exports = {
 	permissions: ['manage_trophies'],
@@ -32,6 +33,7 @@ module.exports = {
 		const object = client.db.guilds.get(`data.${guild}.trophies.${id}`);
 		const value = object?.value;
 		const name = object?.name;
+		const image = object?.image;
 
 		client.db.guilds.delete(`data.${guild}.trophies.${id}`);
 
@@ -40,6 +42,9 @@ module.exports = {
 
 		embed.setColor(color.success);
 		embed.setDescription(`${emoji.success} Sucessfully **deleted** trophy \`${name}\``);
+
+		// Delete the trophy image if it exists
+		fs.unlink(`./images/${image}`, (err) => {});
 
 		return interaction.reply({
 			embeds: [embed]

@@ -75,8 +75,8 @@ module.exports = {
 		});
 
 		if (image) {
-			await downloadImage(image, `${guild}_${next}.png`);
-			embed.setImage(`attachment://${guild}_${next}.png`);
+			await downloadImage(image, `./images/${guild}_${next}.png`);
+			embed.setImage(image);
 		}
 
 		embed.addField(`ID`, `\u200b${next}`, true);
@@ -85,7 +85,7 @@ module.exports = {
 		}
 
 		interaction.reply({
-			embeds: [embed]
+			embeds: [embed],
 		});
 	},
 };

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
-const { color, emoji: emojis, parseUser, getTrophy } = require('../../globals');
+const { color, emoji: emojis, parseUser, getTrophy, downloadImage } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_trophies'],
@@ -77,13 +77,17 @@ module.exports = {
 				embeds: [embed]	
 			});
 		}
+
+		if (image != current.image) {
+			await downloadImage(image, `./images/${guild}_${id}.png`);
+		}
 		
 		client.db.guilds.set(`data.${guild}.trophies.${id}`, {
 			name,
 			description: desc,
 			emoji,
 			value,
-			image,
+			image: `${guild}_${id}.png`,
 			dedication
 		});
 

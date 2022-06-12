@@ -38,7 +38,7 @@ module.exports = {
 
 		embed.setColor(color.main);
 		embed.setTitle(`${emoj} ${name}`);
-		embed.setImage(image);
+		embed.setImage(image.startsWith(`https://`) ? image : `attachment://${image}`);
 		embed.setDescription(`${desc}`);
 		embed.addField('Value', `\u200b${value}`, true);
 		embed.setFooter({
@@ -48,7 +48,8 @@ module.exports = {
 		if (dedication.name) embed.addField('Dedicated to', `\u200b${dedication.name}`, true);
 
 		interaction.reply({
-			embeds: [embed]
+			embeds: [embed],
+			files: (image.startsWith(`https://`) ? [] : ['./images/' + image])
 		});
 	}
 }

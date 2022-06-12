@@ -1,6 +1,10 @@
 const Discord = require('discord.js');
 
-const request = require('request');
+const fetch = require('node-fetch');
+const { writeFile } = require('fs');
+const { promisify } = require('util');
+const writeFilePromise = promisify(writeFile);
+
 const fs = require('fs');
 
 const { REST } = require('@discordjs/rest');
@@ -217,13 +221,10 @@ async function changeActivity(client){
 
 
 
-function downloadImage(uri, filename, callback){
-	request.head(uri, function(err, res, body){
-		console.log('content-type:', res.headers['content-type']);
-		console.log('content-length:', res.headers['content-length']);
-
-		request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-	});
+function downloadImage(url, filename){
+	return fetch(url)
+		.then(x => x.arrayBuffer())
+		.then(x => writeFilePromise(filename, Buffer.from(x)));
 };
 
 
