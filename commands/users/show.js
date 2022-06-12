@@ -3,7 +3,6 @@ const { color, emoji, getTrophy } = require('../../globals');
 const Discord = require('discord.js');
 
 module.exports = {
-	cooldown: 3,
 	data: new SlashCommandBuilder()
 		.setName('show')
 		.setDescription('Show a trophy.')
@@ -46,7 +45,14 @@ module.exports = {
 			text: `Trophy ID: ${id}`,
 		});
 		
-		if (dedication.name) embed.addField('Dedicated to', `\u200b${dedication.name}`, true);
+		if (dedication.name){
+			let dedic = dedication.name;
+			if (dedication.user){
+				dedic = `<@${dedication.user}>`;
+			}
+			embed.addField('Dedicated to', `\u200b${dedic}`, true);
+		}
+			 
 
 		interaction.reply({
 			embeds: [embed],
