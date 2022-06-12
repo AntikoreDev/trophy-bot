@@ -193,6 +193,7 @@ async function getServer(client, id, guild){
 		permissions: {
 			manage_trophies: [],
 			manage_users: [],
+			manage_rewards: []
 		},
 	};
 
