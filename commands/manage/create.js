@@ -29,9 +29,9 @@ module.exports = {
 		const embed = new Discord.MessageEmbed();
 
 		embed.setColor(color.success);
-		embed.setTitle(`${emoji} ${name}`);
-		embed.setDescription(`${emojis.success} Sucessfully created trophy!\n\n${desc}`);
-		embed.setImage(image);
+		embed.setTitle(`${emojis.success} Sucessfully created trophy!`);
+		embed.setDescription(`${emoji} **${name}**\n\n${desc}`);
+		if (image) embed.setImage(image);
 		embed.addField('Value', `\u200b${value}`, true);
 
 		let dedication = {}
