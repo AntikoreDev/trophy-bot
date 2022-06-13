@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { color, emoji, getTrophy } = require('../../globals');
+const { color, emoji, getTrophy, getSetting, getDedication } = require('../../globals');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -37,6 +37,8 @@ module.exports = {
 		const dedication = object?.dedication;
 		const emoj = object?.emoji;
 		const value = object?.value;
+		const signed = object?.signed;
+		const creator = object?.creator;
 
 		embed.setColor(color.main);
 		embed.setTitle(`${emoj} ${name}`);
@@ -47,14 +49,17 @@ module.exports = {
 			text: `Trophy ID: ${id}`,
 		});
 		
-		if (dedication.name){
-			let dedic = dedication.name;
-			if (dedication.user){
-				dedic = `<@${dedication.user}>`;
-			}
-			embed.addField('Dedicated to', `\u200b${dedic}`, true);
+		
+
+		if (signed){
+			embed.addField('Signed by', `\u200b<@${creator}>`, true);
 		}
-			 
+		
+		const config = getSetting(client, guild, 'dedication_display');
+		if (dedication.name){
+			const dedic = await getDedication(interaction.guild, dedication, config);
+			if (dedic) embed.addField('Dedicated to', `\u200b${dedic}`, true);
+		}
 
 		interaction.editReply({
 			embeds: [embed],
