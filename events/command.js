@@ -57,8 +57,34 @@ module.exports = {
 			await command.run(interaction);
 		} catch (error) {
 			console.error(error);
-			if (interaction)
+		
+			if (client.errorChannel !== null){
+				try {
+	
+					const stack = error.stack.slice(0, 900) + "...";
+					
+					const embed = new Discord.MessageEmbed();
+					embed.setTitle(`${emoji.error} Error Log`);
+					embed.setColor(color.error);
+					embed.setDescription(`**Command:** \`${interaction.toString()}\`\n**Perpetrator:** \`${interaction.user.id}\`\n**Guild:** \`${interaction.guild.id}\``);
+					embed.addField(`Stacktrace`, `\`\`\`js\n${stack}\`\`\``);
+	
+					client.errorChannel.send({
+						embeds: [embed]
+					});
+				}
+				catch(err){
+					console.log(err);
+					interaction.channel.send(`Error log could not be sent, dev should know about this...`);
+				}
+			}
+
+			if (!interaction) return;
+
+			if (interaction.deferred || interaction.replied)
+				await interaction.editReply({ content: 'There was an error while executing this command!', ephemeral: true, embeds: [] });
+			else
 				await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-		}	
+	}	
 	}
 }
