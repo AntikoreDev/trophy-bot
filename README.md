@@ -8,16 +8,16 @@ To get started, simply type `trophy tutorial` in your server. You can see all co
 This bot includes the following features:
 * Create and customize trophies for your server users.
 * Award different value trophies for your servers.
-* Set custom name, description, image, value, icon etc to your trophies
-* Leaderboard for the user scores based on the trophies.
-* Customizable role rewards for reaching certain scores.
+* Set custom name, description, image, value, icon, etc. to your trophies
+* Look at a leaderboard of the trophies you have earned.
+* Customize role rewards for users when they reach certain scores.
 * Customize which roles will be able to create, award or revoke trophies.
-* Very simple to use and easy to understand.
-* Modify special settings for your server.
+* Change special settings for your server on how the bot works.
+* Simple to use and easy to understand.
 
 ## Support Server
 You can join our support server to get help and report issues:
-[Click Here]()
+[Click Here](https://discord.gg/4tuPfMW9)
 
 ## Contributing
 If you like this bot, you can help by contributing to it.
