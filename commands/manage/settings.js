@@ -78,12 +78,10 @@ module.exports = {
 			}
 
 			const object = settings.find(n => n.id == setting);
-			const value = (interaction.options.get('value')?.value) || (object.default + 1);
+			const value = (interaction.options.get('value')?.value) ?? (object.default + 1);
 
 			const key = await findOption(object, value);
 			if (key != null){
-
-				console.log(key);
 				
 				client.db.guilds.set(`data.${guild}.settings.${setting}`, key);
 
