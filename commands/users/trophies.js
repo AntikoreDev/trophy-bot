@@ -20,6 +20,8 @@ module.exports = {
 
 	async run (interaction) {
 		
+		await interaction.deferReply();
+
 		const embed = new Discord.MessageEmbed();
 		
 		const client = interaction.client;
@@ -42,8 +44,9 @@ module.exports = {
 				const object = client.db.guilds.get(`data.${guild}.trophies.${trophy}`);
 				if (object){
 					trophyList[trophy] = object;
-					trophyInventory[trophy] = { id: trophy, value: object.value };
-					trophyInventory[trophy].count = (trophyInventory[trophy].count || 0) + 1;
+					
+					if (trophyInventory[trophy] === undefined) trophyInventory[trophy] = { id: trophy, value: object.value, count: 0 };
+					trophyInventory[trophy].count += 1;
 				}
 			}
 
@@ -102,8 +105,6 @@ module.exports = {
 
 			const list = [];
 			for (const item of sorted){
-				const trophy = object[item];
-				
 				let name = object[item].name;
 				let value = object[item].value;
 				let emoj = object[item].emoji;
