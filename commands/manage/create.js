@@ -11,7 +11,8 @@ module.exports = {
 		.addStringOption(option => option.setName('description').setDescription('Description for the trophy').setRequired(false))
 		.addStringOption(option => option.setName('emoji').setDescription('An emoji for the trophy, leave blank for default').setRequired(false))
 		.addNumberOption(option => option.setName('value').setDescription('How much this trophy values. Defaults to 10').setRequired(false))
-		.addStringOption(option => option.setName('dedication').setDescription('Dedicate the trophy to someone, defaults to no one. You can use an user ID as well').setRequired(false))
+		.addStringOption(option => option.setName('dedication').setDescription('Dedicate the trophy to someone, defaults to no one. You can use an id or mention as well').setRequired(false))
+		.addBooleanOption(option => option.setName('signed').setDescription('If true, you\'ll sign this trophy as created by you. Defaults to false').setRequired(false))
 		.addAttachmentOption(option => option.setName('image').setDescription('The image for the trophy, only seen on showcase command').setRequired(false)),
 		
 	async run (interaction) {
@@ -21,12 +22,13 @@ module.exports = {
 		const client = interaction.client;
 		const guild = interaction.guild.id;
 
-		const name = interaction.options?.get('name')?.value || 'New Trophy';
-		const desc = interaction.options?.get('description')?.value || 'No description provided';
-		const emoji = interaction.options?.get('emoji')?.value || ':trophy:';
+		const name = interaction.options?.get('name')?.value ?? 'New Trophy';
+		const desc = interaction.options?.get('description')?.value ?? 'No description provided';
+		const emoji = interaction.options?.get('emoji')?.value ?? ':trophy:';
 		const value = interaction.options?.get('value')?.value || 10;
-		const image = interaction.options?.getAttachment('image') || null;
-		const dedic = interaction.options?.get('dedication')?.value || null;
+		const image = interaction.options?.getAttachment('image') ?? null;
+		const dedic = interaction.options?.get('dedication')?.value ?? null;
+		const signed = interaction.options?.get('signed')?.value ?? false;
 
 		const embed = new Discord.MessageEmbed();
 
@@ -62,7 +64,7 @@ module.exports = {
 		}
 
 		// If value is too big or too small
-		if (value > 99999999 || value < -99999999){
+		if (value > 999999 || value < -999999){
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The value of the trophy is ${value > 0 ? `too big` : `too small`}.`);
 
@@ -122,12 +124,15 @@ module.exports = {
 		const extension = image ? image.name.split('.').pop() : null;
 		
 		client.db.guilds.set(`data.${guild}.trophies.${next}`, {
+			creator: interaction.user.id,
+			created: Date.now(),
 			name,
 			description: desc,
 			emoji,
 			value,
 			image: image?.url ? `${guild}_${next}.${extension}` : null,
-			dedication
+			dedication,
+			signed
 		});
 
 		if (image) {
@@ -156,10 +161,15 @@ module.exports = {
 			embed.setImage(image?.url);
 		}
 
-		embed.addField(`ID`, `\u200b${next}`, true);
+		if (signed){
+			embed.addField(`Signed by`, `<@${interaction.user.id}>`, true);
+		}
+
 		if (dedication.name){
 			embed.addField(`Dedicated to`, dedication.name, true);
 		}
+
+		embed.setFooter({ text: `Trophy ID: ${next}` });
 
 		interaction.editReply({
 			embeds: [embed],
