@@ -7,6 +7,12 @@ module.exports = {
 	name: 'ready',
 	once: true,
 	async run (client) {
+
+		try {
+			client.errorChannel = await client.channels.fetch("985869722199416862").then();
+			client.suggestionChannel = await client.channels.fetch("985872094153830400").then();
+		}
+		catch {}
 		
 		// Import all the modules
 		client.commands 	= await fetchModules(path.join(__dirname, '../commands'), '.js', true);
