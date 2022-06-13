@@ -40,6 +40,7 @@ module.exports = {
 		const signed = object?.signed;
 		const creator = object?.creator;
 
+		embed.setURL(`https://www.youtube.com/watch?v=04854XqcfCY`);
 		embed.setColor(color.main);
 		embed.setTitle(`${emoj} ${name}`);
 		embed.setImage(image.startsWith(`https://`) ? image : `attachment://${image}`);
