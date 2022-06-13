@@ -70,7 +70,10 @@ module.exports = {
 		client.db.guilds.add(`data.${guild}.users.${user}.trophyValue`, value);
 		client.db.bot.add(`data.trophiesAwarded`, count);
 
-		doRewardRoles(client, interaction.guild, interaction.member);
+		try {
+			doRewardRoles(client, interaction.guild, interaction.member);
+		} catch {}
+		
 
 		embed.setColor(color.success);
 		embed.setDescription(`${emoji.success} Successfully awarded **${count}** troph${count === 1 ? 'y' : 'ies'} of **${object.name}** to <@${user}>`);

@@ -70,7 +70,9 @@ module.exports = {
 		client.db.guilds.set(`data.${guild}.users.${user}.trophies`, trophies);
 		client.db.guilds.subtract(`data.${guild}.users.${user}.trophyValue`, value);
 
-		doRewardRoles(client, interaction.guild, interaction.member);
+		try {
+			doRewardRoles(client, interaction.guild, interaction.member);
+		} catch {}
 
 		embed.setColor(color.success);
 		embed.setDescription(`${emoji.success} Successfully removed **${all ? 'all' : count}** troph${count === 1 ? 'y' : 'ies'} of **${object.name}** from <@${user}>`);
