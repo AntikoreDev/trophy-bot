@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
-const { color, emoji, getPage, parseUser } = require('../../globals');
+const { color, emoji, getPage, parseUser, getSetting, anyIn } = require('../../globals');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -87,7 +87,7 @@ module.exports = {
 				text: `Page ${pages.page} of ${pages.last}`,
 			});
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -103,8 +103,27 @@ module.exports = {
 					return object[b].value - object[a].value;
 				});
 
+			const permroles = client.db.guilds.get(`data.${guild.id}.permissions.manage_trophies`) ?? [];
+			const roles = interaction.member.roles.cache.map(role => role.id);
+			
+			const isAdmin = (await client.channels.fetch(interaction.channelId)).permissionsFor(interaction.member).toArray().includes('ADMINISTRATOR');
+			const isPerm = anyIn(permroles, roles);
+			const setting = (getSetting(client, guild, `hide_unused_trophies`) == 0);
+		
+			const hideUnusedTrophies = ((!isPerm && !isAdmin) && setting);
+
+			const users = client.db.guilds.get(`data.${guild}.users`);
+
+			const afterHidden = sorted.filter(trophy => {
+				if (!hideUnusedTrophies) return true;
+				for (const user in users){
+					if (users[user].trophies.includes(trophy)) return true;
+				}
+				return false;
+			});
+
 			const list = [];
-			for (const item of sorted){
+			for (const item of afterHidden){
 				let name = object[item].name;
 				let value = object[item].value;
 				let emoj = object[item].emoji;
@@ -115,8 +134,7 @@ module.exports = {
 
 				list.push(`${emoj} ${name} **${value}**`);
 			}
-
-			
+	
 			const pages = getPage(list, 10, page);
 
 			embed.setColor(color.main);
@@ -129,7 +147,7 @@ module.exports = {
 				text: `Page ${pages.page} of ${pages.last}`,
 			});
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
