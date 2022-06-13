@@ -9,6 +9,7 @@ const client = new Discord.Client({
 		Intents.GUILD_MESSAGES,
 		Intents.GUILD_MEMBERS,
 		Intents.GUILD_EMOJIS_AND_STICKERS,
+		Intents.GUILDS
 	]
 });
 
