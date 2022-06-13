@@ -16,6 +16,24 @@ const color = {
 	success: "#32CD32",
 }
 
+async function getDedication(guild, dedication, config){
+	const name = dedication.name;
+	const id = dedication.user;
+
+	if (!name) return null;
+	if (!id) return name;
+
+	if (config == 0) return `<@${id}>`;
+
+	let user = null;
+	try {
+		user = await guild.members.fetch(id);
+	} catch {}
+	if (!user) return name;
+	if (config == 1) return user?.username ?? name;
+	return `<@${id}>`;
+}
+
 // Settings
 const settings = [
 	{
@@ -31,6 +49,13 @@ const settings = [
 		description: 'When true, the role rewards will stack instead of only adding the highest role reward at a time.',
 		options: ['Stack Roles', 'Only Highest Reward'],
 		default: 1,
+	},
+	{
+		name: 'Hide Unused Trophies',
+		id: 'hide_unused_trophies',
+		description: 'If true, any trophies that were not given to anyone will be hidden for users that don\'t have manage trophies custom permission.',
+		options: ['Hide Unused Trophies', 'Show Unused Trophies'],
+		default: 1,
 	}
 ]
 
@@ -39,7 +64,9 @@ function getSetting(client, guild, setting){
 	const stg = settings.find(x => x.id == setting);
 	if (!stg) return null;
 
-	const set = client.db.guilds.get(`data.${guild}.settings`, stg.default);
+	const config = client.db.guilds.get(`data.${guild}.settings.${setting}`);
+	const set = config ?? stg.default;
+
 	return set;
 };
 
@@ -120,7 +147,7 @@ async function doRewardRoles(client, guild, member){
 		}else{
 			if (!foundBest){
 				award.push(reward.role);
-				remove.push(prevRole);
+				if (prevRole != null) remove.push(prevRole);
 
 				foundBest = true;
 				continue;
@@ -134,6 +161,8 @@ async function doRewardRoles(client, guild, member){
 			foundBest = true;
 		}
 	}
+
+	if (!foundBest) remove.push(prevRole);
 
 	award = award.filter(x => x);
 	remove = remove.filter(x => x);
@@ -218,11 +247,18 @@ async function fetchModules(dir, ext = '.js', command = false, first = true){
 	if (command && first){
 		const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 
-		for (const server of testingServers){
-			await rest.put(Routes.applicationGuildCommands('985134052665356299', server), { body: commands })
+		if (process.platform === "win32"){
+			for (const server of testingServers){
+				await rest.put(Routes.applicationGuildCommands('985134052665356299', server), { body: commands })
+					.then()
+					.catch(console.error);
+			}
+		}else{
+			await rest.put(Routes.applicationCommands('985134052665356299'), { body: commands })
 				.then()
 				.catch(console.error);
 		}
+	
 
 		console.log('Commands updated!');
 	}
@@ -429,7 +465,7 @@ module.exports = {
 	clamp, getPage, getMedal,
 
 	// Parsing
-	parseUser, parseName, clearMentions,
+	parseUser, parseName, clearMentions, getDedication,
 
 	// Database
 	getTrophy, cleanseTrophies, getSetting,
