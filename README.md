@@ -1,8 +1,8 @@
 # Trophies Bot
 Trophies Bot is a bot that can be used to award trophies to users. You can create your own trophies per server with a custom name, description, image and even value, and assign them to users by doing stuff you think deserves to be awarded.
-You can then give reward roles for reaching certain scores, or having a leaderboard for the trophies.
+You can then give reward roles for reaching certain scores, or having a leaderboard for the user scores.
 
-To get started, simply type `trophy tutorial` in your server. You can see all commands with `trophy help`.
+To get started, simply type `/help` in your server to see a few basic info.
 
 ## Features
 This bot includes the following features:
