@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
-const { color, emoji, getTrophy } = require('../../globals');
+const { color, emoji, getTrophy, doRewardRoles } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_users'],
@@ -12,6 +12,8 @@ module.exports = {
 		.addIntegerOption(option => option.setName('count').setDescription('Number of trophies to award, defaults to 1').setRequired(false)),
 
 	async run (interaction) {
+
+		await interaction.deferReply();
 		
 		const embed = new Discord.MessageEmbed();
 
@@ -27,7 +29,8 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emoji.error} Could not find a trophy with the name or ID of \`${trophy}\``);
 
-			return interaction.reply({
+			if (!interaction) return;
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -37,26 +40,43 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emoji.error} Could not find a trophy with the name or ID of \`${trophy}\``);
 
-			return interaction.reply({
+			if (!interaction) return;
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
+
+		if (count < 0 || count > 50){
+			embed.setColor(color.error);
+			embed.setDescription(`${emoji.error} You can only award between 0 and 50 trophies per command.`);
+
+			if (!interaction) return;
+			return interaction.editReply({
+				embeds: [embed]
+			});
+		}
+
+		const prev = client.db.guilds.get(`data.${guild}.users.${user}.trophies`) ?? [];
 
 		const value = object.value * count;
 		let n = count;
 		while (n > 0){
 			
-			client.db.guilds.push(`data.${guild}.users.${user}.trophies`, id);
+			prev.push(id);
 			n--;
 		}
 
+		client.db.guilds.set(`data.${guild}.users.${user}.trophies`, prev);
 		client.db.guilds.add(`data.${guild}.users.${user}.trophyValue`, value);
 		client.db.bot.add(`data.trophiesAwarded`, count);
+
+		doRewardRoles(client, interaction.guild, interaction.member);
 
 		embed.setColor(color.success);
 		embed.setDescription(`${emoji.success} Successfully awarded **${count}** troph${count === 1 ? 'y' : 'ies'} of **${object.name}** to <@${user}>`);
 
-		interaction.reply({
+		if (!interaction) return;
+		await interaction.editReply({
 			embeds: [embed]
 		});
 	}

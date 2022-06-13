@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
-const { color, emoji, getTrophy } = require('../../globals');
+const { color, emoji, getTrophy, doRewardRoles } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_users'],
@@ -12,6 +12,8 @@ module.exports = {
 		.addIntegerOption(option => option.setName('count').setDescription('Number of trophies to revoke, defaults to 1.').setRequired(false)),
 
 	async run (interaction) {
+
+		await interaction.deferReply();
 		
 		const embed = new Discord.MessageEmbed();
 
@@ -27,7 +29,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emoji.error} Could not find a trophy with the name or ID of \`${trophy}\``);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -37,7 +39,17 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emoji.error} Could not find a trophy with the name or ID of \`${trophy}\``);
 
-			return interaction.reply({
+			return interaction.editReply({
+				embeds: [embed]
+			});
+		}
+
+		if (count < 0 || count > 50){
+
+			embed.setColor(color.error);
+			embed.setDescription(`${emoji.error} You can only revoke between 0 and 50 trophies per command.`);
+			
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -58,10 +70,12 @@ module.exports = {
 		client.db.guilds.set(`data.${guild}.users.${user}.trophies`, trophies);
 		client.db.guilds.subtract(`data.${guild}.users.${user}.trophyValue`, value);
 
+		doRewardRoles(client, interaction.guild, interaction.member);
+
 		embed.setColor(color.success);
 		embed.setDescription(`${emoji.success} Successfully removed **${all ? 'all' : count}** troph${count === 1 ? 'y' : 'ies'} of **${object.name}** from <@${user}>`);
 
-		interaction.reply({
+		interaction.editReply({
 			embeds: [embed]
 		});
 	}
