@@ -17,7 +17,7 @@ This bot includes the following features:
 
 ## Support Server
 You can join our support server to get help and report issues:
-[Click Here](https://discord.gg/4tuPfMW9)
+[Click Here](https://discord.gg/kNmgU44xgU)
 
 ## Contributing
 If you like this bot, you can help by contributing to it.
