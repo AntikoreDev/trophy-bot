@@ -12,6 +12,8 @@ module.exports = {
 
 	async run (interaction) {
 
+		await interaction.deferReply();
+
 		const embed = new Discord.MessageEmbed();
 		
 		const client = interaction.client;
@@ -25,7 +27,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emoji.error} Could not find a trophy with the name or ID of \`${trophy}\``);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -46,7 +48,7 @@ module.exports = {
 		// Delete the trophy image if it exists
 		fs.unlink(`./images/${image}`, (err) => {});
 
-		return interaction.reply({
+		return interaction.editReply({
 			embeds: [embed]
 		});
 	}

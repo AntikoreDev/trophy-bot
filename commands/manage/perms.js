@@ -42,6 +42,8 @@ module.exports = {
 		),
 
 	async run (interaction) {
+
+		await interaction.deferReply();
 		
 		const embed = new Discord.MessageEmbed();
 
@@ -63,7 +65,7 @@ module.exports = {
 			embed.addField(`Manage Trophies`, manageTrophies.length ? manageTrophies.join(', ') : 'No permissions yet', true);
 			embed.addField(`Manage Rewards`, manageRewards.length ? manageRewards.join(', ') : 'No permissions yet', true);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});	
 		}
@@ -82,7 +84,7 @@ module.exports = {
 					embed.setColor(color.error);
 					embed.setDescription(`${emoji.error} This role already has the permission \`${permission}\``);
 	
-					return interaction.reply({
+					return interaction.editReply({
 						embeds: [embed]
 					});
 				}
@@ -95,7 +97,7 @@ module.exports = {
 					embed.setColor(color.error);
 					embed.setDescription(`${emoji.error} This role doesn't have permission \`${permission}\``);
 	
-					return interaction.reply({
+					return interaction.editReply({
 						embeds: [embed]
 					});
 				}
@@ -115,7 +117,7 @@ module.exports = {
 					embed.setColor(color.error);
 					embed.setDescription(`${emoji.error} This role already has the permission \`${permission}\``);
 	
-					return interaction.reply({
+					return interaction.editReply({
 						embeds: [embed]
 					});
 				}
@@ -128,7 +130,7 @@ module.exports = {
 					embed.setColor(color.error);
 					embed.setDescription(`${emoji.error} This role doesn't have permission \`${permission}\``);
 	
-					return interaction.reply({
+					return interaction.editReply({
 						embeds: [embed]
 					});
 				}
@@ -147,7 +149,7 @@ module.exports = {
 					embed.setColor(color.error);
 					embed.setDescription(`${emoji.error} This role already has the permission \`${permission}\``);
 	
-					return interaction.reply({
+					return interaction.editReply({
 						embeds: [embed]
 					});
 				}
@@ -160,7 +162,7 @@ module.exports = {
 					embed.setColor(color.error);
 					embed.setDescription(`${emoji.error} This role doesn't have permission \`${permission}\``);
 	
-					return interaction.reply({
+					return interaction.editReply({
 						embeds: [embed]
 					});
 				}
@@ -172,7 +174,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emoji.error} Could not find a permission with the name \`${permission}\``);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -181,7 +183,7 @@ module.exports = {
 		embed.setColor(color.success);
 		embed.setDescription(`${emoji.success} Permission \`${permission}\` has been ${subcommand == 'add' ? 'added' : 'removed'} to role <@&${target}>`);
 
-		return interaction.reply({
+		return interaction.editReply({
 			embeds: [embed]
 		});
 	}

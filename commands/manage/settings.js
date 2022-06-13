@@ -25,6 +25,8 @@ module.exports = {
 		),
 					
 	async run (interaction){
+
+		await interaction.deferReply();
 		
 		const embed = new Discord.MessageEmbed();
 
@@ -35,14 +37,15 @@ module.exports = {
 		if (subcommand == 'list'){
 
 			let text = [];
-			const dbsettings = await client.db.guilds.get(`data.${guild}.settings`);
+			const dbsettings = client.db.guilds.get(`data.${guild}.settings`);
 			for (const stg of available){
 				const setting = settings.find(n => n.id == stg);
 
 				const name = setting.name;
 				const description = setting.description;
 				const options = setting.options;
-				const value = dbsettings?.[stg] || setting.default;
+
+				const value = dbsettings?.[setting.id] ?? setting.default;
 				const parsed = setting.options[value];
 
 				text.push(
@@ -57,7 +60,7 @@ module.exports = {
 			embed.setDescription(text.join(' '));
 			embed.setFooter({ text: `Use /settings set <setting> <value> to change a setting.` });
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});			
 		}
@@ -69,7 +72,7 @@ module.exports = {
 				embed.setColor(color.error);
 				embed.setDescription(`${emoji.error} You must specify a setting to change.`);
 
-				return interaction.reply({
+				return interaction.editReply({
 					embeds: [embed]
 				});
 			}
@@ -79,6 +82,8 @@ module.exports = {
 
 			const key = await findOption(object, value);
 			if (key != null){
+
+				console.log(key);
 				
 				client.db.guilds.set(`data.${guild}.settings.${setting}`, key);
 
@@ -92,7 +97,7 @@ module.exports = {
 
 			}
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}

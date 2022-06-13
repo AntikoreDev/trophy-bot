@@ -16,6 +16,8 @@ module.exports = {
 		
 	async run (interaction) {
 
+		await interaction.deferReply();
+
 		const embed = new Discord.MessageEmbed();
 		
 		const client = interaction.client;
@@ -41,7 +43,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The name of the trophy is too long.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -51,17 +53,17 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The description of the trophy is too long.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
 
 		// If emoji is too long
-		if (emoji.length > 16){
+		if (emoji.length > 64){
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The emoji of the trophy is too long.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -71,7 +73,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The dedication of the trophy is too long.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -114,15 +116,15 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} No changes were made to **${current}**`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]	
 			});
 		}
-
-		const extension = image.name.split('.').pop();
+		
+		const extension = image.split('.').pop();
 		if (image != current.image) {
 			if (!(['png', 'jpg', 'jpeg', 'gif'].includes(extension))) {
-				return interaction.reply({
+				return interaction.editReply({
 					embeds: [
 						new Discord.MessageEmbed()
 							.setColor(color.error)
@@ -132,7 +134,7 @@ module.exports = {
 			}
 
 			if (image.size > 1000000){
-				return interaction.reply({
+				return interaction.editReply({
 					embeds: [
 						new Discord.MessageEmbed()
 							.setColor(color.error)
@@ -157,7 +159,7 @@ module.exports = {
 		embed.setDescription(`${emojis.success} **${current.name}** was edited successfully!`);
 		embed.addField(`Changes`, changes.join('\n'));
 
-		interaction.reply({
+		interaction.editReply({
 			embeds: [embed]
 		});
 	},

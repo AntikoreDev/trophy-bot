@@ -16,6 +16,8 @@ module.exports = {
 		
 	async run (interaction) {
 		
+		await interaction.deferReply();
+
 		const client = interaction.client;
 		const guild = interaction.guild.id;
 
@@ -34,7 +36,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The name of the trophy is too long.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -44,17 +46,17 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The description of the trophy is too long.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
 
 		// If emoji is too long
-		if (emoji.length > 16){
+		if (emoji.length > 64){
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The emoji of the trophy is too long.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -64,7 +66,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The value of the trophy is ${value > 0 ? `too big` : `too small`}.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -74,7 +76,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The dedication of the trophy is too long.`);
 
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -131,7 +133,7 @@ module.exports = {
 		if (image) {
 			
 			if (!(['png', 'jpg', 'jpeg', 'gif'].includes(extension))) {
-				return interaction.reply({
+				return interaction.editReply({
 					embeds: [
 						new Discord.MessageEmbed()
 							.setColor(color.error)
@@ -141,7 +143,7 @@ module.exports = {
 			}
 
 			if (image.size > 1000000){
-				return interaction.reply({
+				return interaction.editReply({
 					embeds: [
 						new Discord.MessageEmbed()
 							.setColor(color.error)
@@ -159,7 +161,7 @@ module.exports = {
 			embed.addField(`Dedicated to`, dedication.name, true);
 		}
 
-		interaction.reply({
+		interaction.editReply({
 			embeds: [embed],
 		});
 	},

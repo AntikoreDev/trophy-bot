@@ -10,6 +10,8 @@ module.exports = {
 
 	async run (interaction) {
 		
+		await interaction.deferReply();
+
 		const embed = new Discord.MessageEmbed();
 
 		const client = interaction.client;
@@ -49,7 +51,7 @@ module.exports = {
 		embed.addField(`Leaderboard`, top.length ? top.join('\n') : `No scores yet`);
 		embed.setFooter({ text: `Page ${pages.page} of ${pages.last}` });
 
-		return interaction.reply({
+		return interaction.editReply({
 			embeds: [embed]
 		});
 
