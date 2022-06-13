@@ -87,6 +87,61 @@ async function getTrophy(client, guild, trophy){
 	return null;
 }
 
+async function doRewardRoles(client, guild, member){
+	
+	// Check if the bot has the manage roles permission
+	const manageRoles = guild.me.permissions.has('MANAGE_ROLES');
+	if (!manageRoles) return;
+
+	// Get all the reward roles
+	const rewards = client.db.guilds.get(`data.${guild.id}.rewards`);
+	if (!rewards) return;
+	if (!rewards.length) return;
+
+	// Get the user score
+	const user = client.db.guilds.get(`data.${guild.id}.users.${member.id}`);
+	if (!user) return;
+
+	// Get the server configuration
+	const config = client.db.guilds.get(`data.${guild.id}.settings`);
+
+	// Get the stack roles setting
+	const stackRoles = config?.stack_roles ?? 1;
+
+	const score = user.trophyValue;
+	let prev = 0, remove = [], award = [], prevRole = null;
+	let foundBest = false;
+	for (const reward of rewards){
+		if (score < reward.requirement){
+			if (prevRole != null) remove.push(prevRole);
+
+			prev = reward.requirement;
+			prevRole = reward.role;
+		}else{
+			if (!foundBest){
+				award.push(reward.role);
+				remove.push(prevRole);
+
+				foundBest = true;
+				continue;
+			}
+				
+			if (stackRoles == 0)
+				award.push(reward.role);
+			else
+				remove.push(reward.role);
+
+			foundBest = true;
+		}
+	}
+
+	award = award.filter(x => x);
+	remove = remove.filter(x => x);
+
+	await member.roles.add(award, `Role rewards`);
+	await member.roles.remove(remove, `Role rewards`);
+}
+
 function parseName(text){
 	if (!text) return text;
 	return text.toLowerCase().replace(/\W/g, '').replace(/ /g, '');
@@ -224,6 +279,7 @@ async function getServer(client, id, guild){
 			current: 0
 		},
 		users: {},
+		rewards: [],
 		permissions: {
 			manage_trophies: [],
 			manage_users: [],
@@ -364,7 +420,7 @@ module.exports = {
 	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric,
 
 	// Runtime
-	sleep, changeActivity, 
+	sleep, changeActivity, doRewardRoles,
 
 	// Output
 	showError, showSuccess, showCooldown,
