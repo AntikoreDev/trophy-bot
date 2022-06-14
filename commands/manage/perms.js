@@ -17,7 +17,7 @@ module.exports = {
 			subcommand
 				.setName('add')
 				.setDescription('Add permissions to a role.')
-				.addStringOption(option => option.setName('permission').setDescription('Which permission you want to add. (Manage Users / Manage Trophies)').setRequired(true).addChoices(
+				.addStringOption(option => option.setName('permission').setDescription('Which permission you want to add.').setRequired(true).addChoices(
 					{ name: 'Manage Users', value: 'manageusers' },
 					{ name: 'Manage Trophies', value: 'managetrophies' },
 					{ name: 'Manage Rewards', value: 'managerewards' },
@@ -28,7 +28,7 @@ module.exports = {
 			subcommand
 				.setName('remove')
 				.setDescription('Remove permissions from a role.')
-				.addStringOption(option => option.setName('permission').setDescription('Which permission you want to add. (Manage Users / Manage Trophies)').setRequired(true).addChoices(
+				.addStringOption(option => option.setName('permission').setDescription('Which permission you want to add.').setRequired(true).addChoices(
 					{ name: 'Manage Users', value: 'manageusers' },
 					{ name: 'Manage Trophies', value: 'managetrophies' },
 					{ name: 'Manage Rewards', value: 'managerewards' },
