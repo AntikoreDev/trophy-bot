@@ -345,8 +345,23 @@ async function changeActivity(client){
 	
 		// Set the client user's activity.
 		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`) ?? 0} awarded trophies!`, { type: 'WATCHING' });
+	}	
+}
+
+async function AttemptToFetchUsers(client, force = false){
+
+	const today = new Date().getDate();
+	const lastDay = client.db.bot.get(`data.lastDay`) ?? 0;
+
+	if (today != lastDay || force){
+
+		client.db.bot.set(`data.lastDay`, today);
+
+		for (const guild of client.guilds.cache.values()){
+			await guild.members.fetch();
+		}
+
 	}
-	
 }
 
 
@@ -461,7 +476,7 @@ const booleans = {
 module.exports = {
 
 	// Fetching
-	fetchModules, getServer, downloadImage,
+	fetchModules, getServer, downloadImage, AttemptToFetchUsers,
 
 	// Technical
 	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric,
