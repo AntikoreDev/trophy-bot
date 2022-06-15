@@ -344,7 +344,7 @@ async function changeActivity(client){
 		await sleep(20000);
 	
 		// Set the client user's activity.
-		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`, 0)} awarded trophies!`, { type: 'WATCHING' });
+		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`) ?? 0} awarded trophies!`, { type: 'WATCHING' });
 	}
 	
 }

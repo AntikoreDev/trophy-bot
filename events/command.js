@@ -16,6 +16,16 @@ module.exports = {
 		
 		const data = await getServer(client, guild.id, guild);
 
+		// Fetch how many users is the bot serving
+		const today = new Date().getDate();
+		const lastDay = client.db.bot.get(`data.lastDay`) ?? 0;
+		if (today != lastDay){
+			client.db.bot.set(`data.lastDay`, today);
+			for (const guild of Object.values(client.guilds.cache)){
+				await guild.members.fetch();
+			}
+		}
+
 		// If it's not a command, then WHY the heck is it here?
 		if (!interaction.isCommand()) return;
 

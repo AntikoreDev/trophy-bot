@@ -26,7 +26,7 @@ module.exports = {
 		client.cooldowns = new Discord.Collection();
 
 		// Set the client user's activity.
-		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`, 0)} awarded trophies!`, { type: 'WATCHING' });
+		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`, 0) ?? 0} awarded trophies!`, { type: 'WATCHING' });
 
 		changeActivity(client);
 
