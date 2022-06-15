@@ -199,6 +199,18 @@ function anyIn(from, which){
 	return which.some(x => from.includes(x));
 }
 
+function timeFormat(ms) {
+    let seconds = ms / 1000;
+    const hours = parseInt(seconds / 3600);
+
+    seconds = seconds % 3600;
+    const minutes = parseInt(seconds / 60);
+
+    seconds = seconds % 60;
+
+    return `${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m ` : ''}${Math.floor(seconds)}s `.trim();
+}
+
 async function fetchModules(dir, ext = '.js', command = false, first = true){
 
 	// Create a collection for all the modules
@@ -249,7 +261,7 @@ async function fetchModules(dir, ext = '.js', command = false, first = true){
 
 		if (process.platform === "win32"){
 			for (const server of testingServers){
-				await rest.put(Routes.applicationGuildCommands('985134052665356299', server), { body: commands })
+				await rest.put(Routes.applicationGuildCommands('985903758607265832', server), { body: commands })
 					.then()
 					.catch(console.error);
 			}
@@ -286,8 +298,7 @@ function isBanned(id){
 
 const testingServers = [
 	'985439832388042822',
-	'631540341148876800',
-	'857735916067356682'
+	// '631540341148876800',
 ]
 
 
@@ -459,7 +470,7 @@ module.exports = {
 	sleep, changeActivity, doRewardRoles,
 
 	// Output
-	showError, showSuccess, showCooldown,
+	showError, showSuccess, showCooldown, timeFormat,
 
 	// Math
 	clamp, getPage, getMedal,

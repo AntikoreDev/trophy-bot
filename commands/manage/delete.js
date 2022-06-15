@@ -39,6 +39,9 @@ module.exports = {
 
 		client.db.guilds.delete(`data.${guild}.trophies.${id}`);
 
+		const trophies = (client.db.bot.get(`data.trophies`) ?? 0);
+		client.db.bot.set(`data.trophies`, Math.max(0, trophies - 1));
+
 		// Remove trophy from the users who have it
 		await cleanseTrophies(client, guild, id, value);
 

@@ -171,6 +171,9 @@ module.exports = {
 
 		embed.setFooter({ text: `Trophy ID: ${next}` });
 
+		const trophies = (client.db.bot.get(`data.trophies`) ?? 0);
+		client.db.bot.set(`data.trophies`, trophies + 1);
+
 		interaction.editReply({
 			embeds: [embed],
 		});

@@ -13,7 +13,7 @@ module.exports = {
 			client.suggestionChannel = await client.channels.fetch("985872094153830400").then();
 		}
 		catch {}
-		
+
 		// Import all the modules
 		client.commands 	= await fetchModules(path.join(__dirname, '../commands'), '.js', true);
 		client.languages 	= await fetchModules(path.join(__dirname, '../locale/languages'));
@@ -40,6 +40,7 @@ module.exports = {
 				commands: {
 					total: 0
 				},
+				trophies: 0,
 				trophiesAwarded: 0,
 			});
 		}
