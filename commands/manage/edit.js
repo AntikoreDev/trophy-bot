@@ -121,7 +121,9 @@ module.exports = {
 			});
 		}
 		
-		const extension = image.split('.').pop();
+		let extension = null;
+		if (image)
+		 	extension = image.split('.').pop();
 		if (image != current.image) {
 			if (!(['png', 'jpg', 'jpeg', 'gif'].includes(extension))) {
 				return interaction.editReply({
