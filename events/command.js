@@ -17,7 +17,7 @@ module.exports = {
 		const data = await getServer(client, guild.id, guild);
 
 		// Fetch how many users is the bot serving
-		await AttemptToFetchUsers(client);
+		AttemptToFetchUsers(client);
 
 		// If it's not a command, then WHY the heck is it here?
 		if (!interaction.isCommand()) return;
