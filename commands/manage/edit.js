@@ -26,6 +26,15 @@ module.exports = {
 		const trophy = interaction.options?.get('trophy')?.value || null;
 		const id = await getTrophy(client, guild, trophy);
 
+		if (!id){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} No trophies found for that name/id to edit.`);
+
+			return interaction.editReply({
+				embeds: [embed]
+			});
+		}
+
 		const current = client.db.guilds.get(`data.${guild}.trophies.${id}`);
 
 		const value = current.value;
