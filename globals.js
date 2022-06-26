@@ -114,7 +114,7 @@ async function getTrophy(client, guild, trophy){
 	return null;
 }
 
-async function doRewardRoles(client, guild, member){
+async function doRewardRoles(client, guild, id){
 	
 	// Check if the bot has the manage roles permission
 	const manageRoles = guild.me.permissions.has('MANAGE_ROLES');
@@ -126,7 +126,7 @@ async function doRewardRoles(client, guild, member){
 	if (!rewards.length) return;
 
 	// Get the user score
-	const user = client.db.guilds.get(`data.${guild.id}.users.${member.id}`);
+	const user = client.db.guilds.get(`data.${guild.id}.users.${id}`);
 	if (!user) return;
 
 	// Get the server configuration
@@ -166,6 +166,8 @@ async function doRewardRoles(client, guild, member){
 
 	award = award.filter(x => x);
 	remove = remove.filter(x => x);
+
+	const member = await guild.members.fetch(id);
 
 	await member.roles.add(award, `Role rewards`);
 	await member.roles.remove(remove, `Role rewards`);

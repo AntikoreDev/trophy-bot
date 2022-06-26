@@ -71,7 +71,7 @@ module.exports = {
 		client.db.guilds.subtract(`data.${guild}.users.${user}.trophyValue`, value);
 
 		try {
-			doRewardRoles(client, interaction.guild, interaction.member);
+			doRewardRoles(client, interaction.guild, user);
 		} catch {}
 
 		embed.setColor(color.success);

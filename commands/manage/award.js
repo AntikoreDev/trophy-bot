@@ -71,7 +71,7 @@ module.exports = {
 		client.db.bot.add(`data.trophiesAwarded`, count);
 
 		try {
-			doRewardRoles(client, interaction.guild, interaction.member);
+			doRewardRoles(client, interaction.guild, user);
 		} catch {}
 		
 
