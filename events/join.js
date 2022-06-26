@@ -6,7 +6,9 @@ module.exports = {
 	name: 'guildCreate',
 	once: false,
 	async run (guild) {
+		
 		console.log(`Joined a new guild!`);
+		await guild.members.fetch();
 
 		// In case someone is reading this...
 		// Just a friendly reminder for myself to ha- love Discord API <3
