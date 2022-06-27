@@ -40,7 +40,7 @@ module.exports = {
 		const top = [];
 		for (const user of pages.list) {
 			const value = sorted.get(user);
-			top.push(`**${i}.-** <@${user}> >> **${value}** ${getMedal(i)}`);
+			top.push(`${getMedal(i)} **${i}.-** <@${user}> ➤ **${value}** :medal:`);
 
 			i++;
 		}
