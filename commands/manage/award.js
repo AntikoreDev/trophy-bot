@@ -76,7 +76,7 @@ module.exports = {
 		
 
 		embed.setColor(color.success);
-		embed.setDescription(`${emoji.success} Successfully awarded **${count}** troph${count === 1 ? 'y' : 'ies'} of **${object.name}** to <@${user}>`);
+		embed.setDescription(`${emoji.success} Successfully awarded **${count}** troph${count === 1 ? 'y' : 'ies'} of ${object.emoji} **${object.name}** to <@${user}>`);
 
 		if (!interaction) return;
 		await interaction.editReply({

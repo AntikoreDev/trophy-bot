@@ -36,6 +36,7 @@ module.exports = {
 		const value = object?.value;
 		const name = object?.name;
 		const image = object?.image;
+		const icon = object?.emoji;
 
 		client.db.guilds.delete(`data.${guild}.trophies.${id}`);
 
@@ -46,7 +47,7 @@ module.exports = {
 		await cleanseTrophies(client, guild, id, value);
 
 		embed.setColor(color.success);
-		embed.setDescription(`${emoji.success} Sucessfully **deleted** trophy \`${name}\``);
+		embed.setDescription(`${emoji.success} Sucessfully **deleted** trophy ${icon} **${name}**`);
 
 		// Delete the trophy image if it exists
 		fs.unlink(`./images/${image}`, (err) => {});

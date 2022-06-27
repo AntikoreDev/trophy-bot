@@ -75,7 +75,7 @@ module.exports = {
 		} catch {}
 
 		embed.setColor(color.success);
-		embed.setDescription(`${emoji.success} Successfully removed **${all ? 'all' : count}** troph${count === 1 ? 'y' : 'ies'} of **${object.name}** from <@${user}>`);
+		embed.setDescription(`${emoji.success} Successfully removed **${all ? 'all' : count}** troph${count === 1 ? 'y' : 'ies'} of ${object.emoji} **${object.name}** from <@${user}>`);
 
 		interaction.editReply({
 			embeds: [embed]
