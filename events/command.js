@@ -84,10 +84,14 @@ module.exports = {
 
 			if (!interaction) return;
 
+			const errorEmbed = new Discord.MessageEmbed();
+			errorEmbed.setDescription(`${emoji.error} There was an error while executing this command!`);
+			errorEmbed.setColor(color.error);
+
 			if (interaction.deferred || interaction.replied)
-				await interaction.editReply({ content: 'There was an error while executing this command!', ephemeral: true, embeds: [] });
+				await interaction.editReply({ ephemeral: true, embeds: [errorEmbed] });
 			else
-				await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+				await interaction.reply({ ephemeral: true, embeds: [errorEmbed] });
 	}	
 	}
 }
