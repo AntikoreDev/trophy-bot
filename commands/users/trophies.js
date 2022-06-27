@@ -32,7 +32,7 @@ module.exports = {
 		if (subcommand === 'user'){
 
 			const user = interaction.options?.get('user')?.value || interaction.user.id;
-			const page = Math.floor(Math.min(interaction.options?.get('page')?.value || 1, 1));
+			const page = Math.floor(Math.max(interaction.options?.get('page')?.value || 1, 1));
 
 			const score = client.db.guilds.get(`data.${guild}.users.${user}.trophyValue`) || 0;
 
@@ -94,7 +94,7 @@ module.exports = {
 		
 		if (subcommand === 'guild'){
 
-			const page = Math.floor(Math.min(interaction.options?.get('page')?.value || 1, 1));
+			const page = Math.floor(Math.max(interaction.options?.get('page')?.value || 1, 1));
 			const object = client.db.guilds.get(`data.${guild}.trophies`);
 			const trophies = Object.keys(object).filter(x => x != 'current');
 
