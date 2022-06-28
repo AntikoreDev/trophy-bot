@@ -9,8 +9,6 @@ module.exports = {
 		.addIntegerOption(option => option.setName('page').setDescription('Which page to show. Defaults to 1').setRequired(false)),
 
 	async run (interaction) {
-		
-		await interaction.deferReply();
 
 		const embed = new Discord.MessageEmbed();
 

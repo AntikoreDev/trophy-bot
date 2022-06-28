@@ -16,9 +16,9 @@ module.exports = {
 		embed.setDescription(`You can invite me to your server by using the following link\n\n*No worries, no rickroll in here ;)*\n[Click here](https://discord.com/oauth2/authorize?client_id=985134052665356299&permissions=34816&scope=applications.commands%20bot)`);
 		embed.setThumbnail(interaction.client.user.displayAvatarURL());
 
-		return interaction.reply({
+		return interaction.editReply({
 			embeds: [embed],
-			ephemeral: true
+			ephemeral: true,
 		});
 	}
 }

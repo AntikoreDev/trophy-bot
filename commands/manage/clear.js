@@ -10,8 +10,6 @@ module.exports = {
 		.addUserOption(option => option.setName('user').setDescription('User to award the trophy to').setRequired(true)),
 
 	async run (interaction) {
-
-		await interaction.deferReply();
 		
 		const embed = new Discord.MessageEmbed();
 

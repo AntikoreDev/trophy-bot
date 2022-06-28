@@ -12,8 +12,6 @@ module.exports = {
 		.addIntegerOption(option => option.setName('count').setDescription('Number of trophies to award, defaults to 1').setRequired(false)),
 
 	async run (interaction) {
-
-		await interaction.deferReply();
 		
 		const embed = new Discord.MessageEmbed();
 

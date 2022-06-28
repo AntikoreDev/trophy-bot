@@ -21,9 +21,9 @@ module.exports = {
 		)
 
 		if (!interaction) return;
-		interaction.reply({
+		return interaction.editReply({
 			embeds: [embed],
-			ephemeral: true
+			ephemeral: true,
 		});
 	}
 }

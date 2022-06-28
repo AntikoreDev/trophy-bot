@@ -30,7 +30,7 @@ module.exports = {
 			`**Awards:** ${client.db.bot.get(`data.trophiesAwarded`) ?? 0} :medal:\n`
 		, true);
 
-		interaction.reply({
+		return interaction.editReply({
 			embeds: [embed]
 		});
 		

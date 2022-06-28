@@ -19,8 +19,6 @@ module.exports = {
 		),
 
 	async run (interaction) {
-		
-		await interaction.deferReply();
 
 		const embed = new Discord.MessageEmbed();
 		

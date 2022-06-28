@@ -19,7 +19,7 @@ module.exports = {
 			embed.setColor(color.error);
 			embed.setDescription(`${emoji.error} Sorry! Looks like the dev did something dum dum and the bot cannot send your suggestion. You may tell him to fix it.\nRefer to [Github Issues](https://github.com/Aidanete/trophy-bot) to report this issue.`);
 		
-			return interaction.reply({
+			return interaction.editReply({
 				embeds: [embed]
 			});
 		}
@@ -28,7 +28,7 @@ module.exports = {
 		embed.setTitle(':outbox_tray: Suggestion Sent');
 		embed.setDescription(`Your suggestion has been sent to the developers. You won't receive any feedback but if your suggestion was accepted, it may appear in the bot sooner or later.`);
 
-		await interaction.reply({
+		await interaction.editReply({
 			embeds: [embed]
 		});
 

@@ -16,8 +16,6 @@ module.exports = {
 		.addAttachmentOption(option => option.setName('image').setDescription('The image for the trophy, only seen on showcase command').setRequired(false)),
 		
 	async run (interaction) {
-		
-		await interaction.deferReply();
 
 		const client = interaction.client;
 		const guild = interaction.guild.id;

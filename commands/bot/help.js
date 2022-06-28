@@ -27,8 +27,8 @@ module.exports = {
 		);
 	
 
-		return interaction.reply({
-			embeds: [embed],
+		return interaction.editReply({
+			embeds: [embed]
 		});
 	}
 }

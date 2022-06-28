@@ -20,7 +20,7 @@ module.exports = {
 			`\n\nThis is bot ping, not yours :).`
 		);
 
-		interaction.reply({
+		return interaction.editReply({
 			embeds: [embed]
 		});
 	},

@@ -23,7 +23,7 @@ module.exports = {
 		embed.setThumbnail(interaction.client.user.displayAvatarURL());
 		embed.setColor(color.main);
 
-		interaction.reply({
+		return interaction.editReply({
 			embeds: [embed]
 		});
 	},

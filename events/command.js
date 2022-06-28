@@ -9,6 +9,8 @@ module.exports = {
 
 		if (!interaction.inGuild()) return; 
 
+		await interaction.deferReply();
+
 		const client = interaction.client;
 		const guild = interaction.guild;
 
@@ -44,7 +46,7 @@ module.exports = {
 					embed.setDescription(`${emoji.error} You do not have permission to use this command.\nYou need the \`${perm}\` custom permission.`);
 					embed.setFooter({ text: `You can change which roles have these permissions with the command /permissions` });
 
-					return interaction.reply({
+					return interaction.editReply({
 						embeds: [embed]
 					});
 				}
@@ -88,10 +90,7 @@ module.exports = {
 			errorEmbed.setDescription(`${emoji.error} There was an error while executing this command!`);
 			errorEmbed.setColor(color.error);
 
-			if (interaction.deferred || interaction.replied)
-				await interaction.editReply({ ephemeral: true, embeds: [errorEmbed] });
-			else
-				await interaction.reply({ ephemeral: true, embeds: [errorEmbed] });
-	}	
+			await interaction.editReply({ ephemeral: true, embeds: [errorEmbed] });
+		}	
 	}
 }
