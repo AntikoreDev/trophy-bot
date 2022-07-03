@@ -67,7 +67,7 @@ const settings = [
 ]
 
 function isInServer(guild, user){
-	return guild?.members?.cache?.get(user) ?? false;
+	return guild.members.cache.get(user) != undefined;
 }
 
 // In very bad naming variables, please. discretion from the reader is thankful.
