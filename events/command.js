@@ -87,7 +87,8 @@ module.exports = {
 			if (!interaction) return;
 
 			const errorEmbed = new Discord.MessageEmbed();
-			errorEmbed.setDescription(`${emoji.error} There was an error while executing this command!`);
+			errorEmbed.setDescription(`${emoji.error} There was an error while executing this command!\nYou can join our [support server](https://discord.gg/kNmgU44xgU) to report the issue`);
+			errorEmbed.setFooter({ text: 'Errors are automatically delivered to the developer, it may be fixed in about 1 to 24 hours, but reporting will help to quick the process' });
 			errorEmbed.setColor(color.error);
 
 			await interaction.editReply({ ephemeral: true, embeds: [errorEmbed] });
