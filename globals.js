@@ -56,8 +56,19 @@ const settings = [
 		description: 'If true, any trophies that were not given to anyone will be hidden for users that don\'t have manage trophies custom permission.',
 		options: ['Hide Unused Trophies', 'Show Unused Trophies'],
 		default: 1,
+	},
+	{
+		name: 'Hide Quit Users',
+		id: 'hide_quit_users',
+		description: 'If true, any users that quit the server will be hidden from the leaderboard.',
+		options: ['Hide Quit Users', 'Show Quit Users'],
+		default: 0,
 	}
 ]
+
+function isInServer(guild, user){
+	return guild?.members?.cache?.get(user) ?? false;
+}
 
 // In very bad naming variables, please. discretion from the reader is thankful.
 function getSetting(client, guild, setting){
@@ -478,7 +489,7 @@ const booleans = {
 module.exports = {
 
 	// Fetching
-	fetchModules, getServer, downloadImage, AttemptToFetchUsers,
+	fetchModules, getServer, downloadImage, AttemptToFetchUsers, isInServer,
 
 	// Technical
 	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric,

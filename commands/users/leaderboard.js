@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { color, emoji, getMedal, getPage } = require('../../globals');
+const { color, emoji, getMedal, getPage, isInServer, getSetting } = require('../../globals');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -23,13 +23,11 @@ module.exports = {
 
 		const keys = Object.keys(users);
 		for (const key of keys) {
-			if (users[key].trophyValue) {
+			if (users[key].trophyValue && (isInServer(interaction.guild, key) || getSetting(client, guild, 'hide_quit_users') == 1)) {
 				list.set(key, users[key].trophyValue);
-
 				total += users[key].trophyValue;
 			}
 		}
-
 
 		const sorted = list.sort((a, b) => b - a);
 		const pages = getPage(Array.from(sorted.keys()), 10, page);
