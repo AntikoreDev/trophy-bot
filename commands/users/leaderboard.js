@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { color, emoji, getMedal, getPage, isInServer, getSetting } = require('../../globals');
+const { color, emoji, getMedal, getPage, isInServer, getSetting, parseFormat } = require('../../globals');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -32,11 +32,14 @@ module.exports = {
 		const sorted = list.sort((a, b) => b - a);
 		const pages = getPage(Array.from(sorted.keys()), 10, page);
 
+		const config = getSetting(client, guild, 'leaderboard_format') ?? 0;
+
 		let i = ((page - 1) * 10) + 1;
 		const top = [];
 		for (const user of pages.list) {
 			const value = sorted.get(user);
-			top.push(`${getMedal(i)} **${i}.-** <@${user}> ➤ **${value}** :medal:`);
+			const parse = await parseFormat(config, interaction.guild, user);
+			top.push(`${getMedal(i)} **${i}.-** ${parse} ➤ **${value}** :medal:`);
 
 			i++;
 		}

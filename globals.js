@@ -63,6 +63,13 @@ const settings = [
 		description: 'If true, any users that quit the server will be hidden from the leaderboard.',
 		options: ['Hide Quit Users', 'Show Quit Users'],
 		default: 0,
+	},
+	{
+		name: 'Leaderboard Format',
+		id: 'leaderboard_format',
+		description: 'How to display users on the leaderboard. (If there are issues on phones, try changing this to any other than mention',
+		options: ['Mention', 'Username', 'Nickname', 'Username and Tag'],
+		default: 0,
 	}
 ]
 
@@ -123,6 +130,26 @@ async function getTrophy(client, guild, trophy){
 	}
 
 	return null;
+}
+
+async function parseFormat(config, guild, id, pre = "Unknown User"){
+	let user = null;
+	switch (config){
+		case 1:
+			user = await guild.members.fetch(id);
+			return user?.user?.username ?? pre;
+
+		case 2:
+			user = await guild.members.fetch(id);
+			return user?.nickname ?? user?.user?.username ?? pre;
+
+		case 3:
+			user = await guild.members.fetch(id);
+			return user?.user?.tag ?? pre;
+			
+		default:
+			return `<@${id}>`;
+	}
 }
 
 async function doRewardRoles(client, guild, id){
@@ -504,7 +531,7 @@ module.exports = {
 	clamp, getPage, getMedal,
 
 	// Parsing
-	parseUser, parseName, clearMentions, getDedication,
+	parseUser, parseName, parseFormat, clearMentions, getDedication,
 
 	// Database
 	getTrophy, cleanseTrophies, getSetting,
