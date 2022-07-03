@@ -43,7 +43,7 @@ module.exports = {
 		embed.setTitle(`${emoj} ${name}`);
 		embed.setImage(image.startsWith(`https://`) ? image : `attachment://${image}`);
 		embed.setDescription(`${desc}`);
-		embed.addField('Value', `\u200b${value}`, true);
+		embed.addField('Value', `\u200b${value} :medal:`, true);
 		embed.setFooter({
 			text: `Trophy ID: ${id}`,
 		});
