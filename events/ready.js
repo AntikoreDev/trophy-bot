@@ -1,5 +1,5 @@
 // This event runs whenever the bot is ready to start working!
-const { fetchModules, changeActivity, AttemptToFetchUsers } = require('../globals.js');
+const { fetchModules, changeActivity, AttemptToFetchUsers, updatePanels } = require('../globals.js');
 const path = require('path');
 const Discord = require('discord.js');
 
@@ -29,6 +29,7 @@ module.exports = {
 		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`, 0) ?? 0} awarded trophies!`, { type: 'WATCHING' });
 
 		changeActivity(client);
+		updatePanels(client);
 
 		await AttemptToFetchUsers(client, true);
 

@@ -385,7 +385,7 @@ async function changeActivity(client){
 	
 		// Set the client user's activity.
 		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`) ?? 0} awarded trophies!`, { type: 'WATCHING' });
-	}	
+	}
 }
 
 async function AttemptToFetchUsers(client, force = false){
@@ -508,6 +508,74 @@ function getPage(list, perPage, page = 1){
 	};
 }
 
+async function updatePanel(client, guild){
+	const id = guild.id;
+	const panel = client.db.guilds.get(`data.${id}.panel`);
+
+	if (!panel) return;
+
+	const channel = await guild.channels.fetch(panel.channel);
+	if (!channel) return;
+	
+	const message = await channel.messages.fetch(panel.message);
+	if (!message) return;
+
+	const embed = new Discord.MessageEmbed();
+
+	const page = 1;
+	const users = client.db.guilds.get(`data.${id}.users`) || {};
+
+	const list = new Discord.Collection();
+	let total = 0;
+
+	const keys = Object.keys(users);
+	for (const key of keys) {
+		if (users[key].trophyValue && (isInServer(guild, key) || getSetting(client, id, 'hide_quit_users') == 1)) {
+			list.set(key, users[key].trophyValue);
+			total += users[key].trophyValue;
+		}
+	}
+
+	const sorted = list.sort((a, b) => b - a);
+	const pages = getPage(Array.from(sorted.keys()), 10, page);
+
+	const config = getSetting(client, id, 'leaderboard_format') ?? 0;
+
+	let i = ((page - 1) * 10) + 1;
+	const top = [];
+	for (const user of pages.list) {
+		const value = sorted.get(user);
+		const parse = await parseFormat(config, guild, user);
+		top.push(`${getMedal(i)} **${i}.-** ${parse} ➤ **${value}** :medal:`);
+
+		i++;
+	}
+
+	embed.setColor(color.main);
+	embed.setTitle(`${emoji.trophy} ${guild?.name ?? 'Server'}'s Leaderboard`);
+	embed.setDescription(`Total server score: **${total}** :medal:`);
+	embed.addField(`Leaderboard`, top.length ? top.join('\n') : `No scores yet`);
+	embed.setFooter({ text: `Page ${pages.page} of ${pages.last}` });
+
+	return await message.edit({
+		content: `\u200b`,
+		embeds: [embed]
+	});
+}
+
+async function updatePanels(client){
+	while (true){
+		await sleep(60000);
+		for (const guild of client.guilds.cache.values()){
+			try {
+				await updatePanel(client, guild);
+			}
+			catch {}
+			await sleep(1000);
+		}
+	}
+}
+
 const booleans = {
 	true: ['yes', 'y', 'true', 't', '1', 'on'],
 	false: ['no', 'n', 'false', 'f', '0', 'off']
@@ -522,10 +590,10 @@ module.exports = {
 	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric,
 
 	// Runtime
-	sleep, changeActivity, doRewardRoles,
+	sleep, changeActivity, updatePanels, doRewardRoles,
 
 	// Output
-	showError, showSuccess, showCooldown, timeFormat,
+	showError, showSuccess, showCooldown, timeFormat, updatePanel,
 
 	// Math
 	clamp, getPage, getMedal,
