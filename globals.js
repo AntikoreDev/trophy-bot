@@ -251,6 +251,13 @@ function timeFormat(ms) {
     return `${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m ` : ''}${Math.floor(seconds)}s `.trim();
 }
 
+async function attemptFetchIfCacheCleared(keys, guild){
+	const cacheUsers = guild.members.cache.size;
+	if (keys.length > cacheUsers){
+		await guild.members.fetch();
+	}
+}
+
 async function fetchModules(dir, ext = '.js', command = false, first = true){
 
 	// Create a collection for all the modules
@@ -277,8 +284,8 @@ async function fetchModules(dir, ext = '.js', command = false, first = true){
 					commands.push(module.data.toJSON());
 				} 
 				else {
-					if (!module.name) continue;
-					collection.set(module.name, module);
+					if (!module.names) continue;
+					collection.set(module.names[0], module);
 				}
 			}
 			catch (e) {
@@ -529,6 +536,8 @@ async function updatePanel(client, guild){
 	let total = 0;
 
 	const keys = Object.keys(users);
+	await attemptFetchIfCacheCleared(keys, guild);
+
 	for (const key of keys) {
 		if (users[key].trophyValue && (isInServer(guild, key) || getSetting(client, id, 'hide_quit_users') == 1)) {
 			list.set(key, users[key].trophyValue);
@@ -555,7 +564,6 @@ async function updatePanel(client, guild){
 	embed.setTitle(`${emoji.trophy} ${guild?.name ?? 'Server'}'s Leaderboard`);
 	embed.setDescription(`Total server score: **${total}** :medal:`);
 	embed.addField(`Leaderboard`, top.length ? top.join('\n') : `No scores yet`);
-	embed.setFooter({ text: `Page ${pages.page} of ${pages.last}` });
 
 	return await message.edit({
 		content: `\u200b`,
@@ -584,7 +592,7 @@ const booleans = {
 module.exports = {
 
 	// Fetching
-	fetchModules, getServer, downloadImage, AttemptToFetchUsers, isInServer,
+	fetchModules, getServer, downloadImage, AttemptToFetchUsers, isInServer, attemptFetchIfCacheCleared,
 
 	// Technical
 	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric,

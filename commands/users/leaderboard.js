@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { color, emoji, getMedal, getPage, isInServer, getSetting, parseFormat } = require('../../globals');
+const { color, emoji, getMedal, getPage, isInServer, getSetting, parseFormat, attemptFetchIfCacheCleared } = require('../../globals');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -22,6 +22,8 @@ module.exports = {
 		let total = 0;
 
 		const keys = Object.keys(users);
+		await attemptFetchIfCacheCleared(keys, interaction.guild);
+
 		for (const key of keys) {
 			if (users[key].trophyValue && (isInServer(interaction.guild, key) || getSetting(client, guild, 'hide_quit_users') == 1)) {
 				list.set(key, users[key].trophyValue);
