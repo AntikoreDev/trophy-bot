@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
-const { emoji, color, updatePanel, showSuccess } = require('../../globals');
+const { emoji, color, updatePanel, showSuccess, showError } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_users'],
@@ -28,14 +28,25 @@ module.exports = {
 		const subcommand = interaction.options.getSubcommand();
 
 		if (subcommand === 'create'){
-			const msg = await channel.send(`Creating panel...`);
-			client.db.guilds.set(`data.${guild}.panel`, {
-				message: msg.id,
-				channel: channel.id	
-			});
+			try {
+				const msg = await channel.send(`Creating panel...`);
+				client.db.guilds.set(`data.${guild}.panel`, {
+					message: msg.id,
+					channel: channel.id	
+				});
+	
+				await updatePanel(client, interaction.guild);
+				return interaction.deleteReply();
+			} catch {
+				const embed = new Discord.MessageEmbed();
+				embed.setColor(color.error);
+				embed.setDescription(showError('Failed to create panel. Check channel and bot permissions. If issue persists, join our [Support Server](https://discord.gg/kNmgU44xgU).'));
 
-			await updatePanel(client, interaction.guild);
-			return interaction.deleteReply();
+				return interaction.editReply({
+					embeds: [embed]
+				});
+			}
+			
 		}
 		else if (subcommand === 'delete'){
 			client.db.guilds.delete(`data.${guild}.panel`);
