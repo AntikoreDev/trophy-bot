@@ -70,7 +70,7 @@ module.exports = {
 					value = `+${value}`;
 				}
 
-				trophyInvList.push(`${trophyEmoji} ${name} **${value}** _x${count}_`);
+				trophyInvList.push(`${trophyEmoji} ${name} ${(value != 0 ? `**${value}** ` : ``)}_x${count}_`);
 			}
 			
 			const pages = getPage(trophyInvList, 10, page);
@@ -130,7 +130,7 @@ module.exports = {
 					value = `+${value}`;
 				}
 
-				list.push(`${emoj} ${name} **${value}**`);
+			list.push(`${emoj} ${name} ${(value != 0 ? `**${value}**` : ``)}`);
 			}
 	
 			const pages = getPage(list, 10, page);
