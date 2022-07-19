@@ -343,6 +343,8 @@ function isBanned(id){
 	return false;
 }
 
+const supportServer = '985439832388042822';
+
 const testingServers = [
 	'985439832388042822',
 	// '631540341148876800',
@@ -616,5 +618,5 @@ module.exports = {
 	checkName, anyIn,
 
 	// Colors, emojis, etc.
-	color, emoji, booleans, testingServers, settings
+	color, emoji, booleans, testingServers, settings, supportServer
 }
