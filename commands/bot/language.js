@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
 const { color } = require('../../globals');
 
+/*
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('language')
@@ -39,3 +40,4 @@ module.exports = {
 		}
 	}
 }
+*/
