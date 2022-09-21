@@ -6,6 +6,7 @@ module.exports = {
 	permissions: ['manage_trophies'],
 	data: new SlashCommandBuilder()
 		.setName('create')
+		.setDefaultMemberPermissions("0")
 		.setDescription('Create a new trophy for your server.')
 		.addStringOption(option => option.setName('name').setDescription('The name of the trophy.').setRequired(true))
 		.addStringOption(option => option.setName('description').setDescription('Description for the trophy').setRequired(false))

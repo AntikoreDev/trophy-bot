@@ -5,7 +5,7 @@ const { emoji, color, updatePanel, showSuccess, showError } = require('../../glo
 module.exports = {
 	permissions: ['manage_users'],
 	data: new SlashCommandBuilder()
-		.setDefaultMemberPermissions("32")
+		.setDefaultMemberPermissions("0")
 		.setName('panel')
 		.setDescription('Create a leaderboard panel. You can only have one panel at a time.')
 		.addSubcommand(subcommand =>

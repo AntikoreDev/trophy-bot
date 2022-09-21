@@ -1,4 +1,4 @@
-const { getServer, anyIn, color, emoji, isDev, AttemptToFetchUsers } = require("../globals");
+const { getServer, anyIn, color, emoji, isDev, AttemptToFetchUsers, imsafeWarning } = require("../globals");
 const Discord = require("discord.js");
 
 // Note from the developer, I hate interactions and the whole slash command system.
@@ -37,19 +37,10 @@ module.exports = {
 		const roles = user.roles.cache.map(role => role.id);
 		const isAdmin = (await client.channels.fetch(interaction.channelId)).permissionsFor(interaction.member).toArray().includes('ADMINISTRATOR');
 
-		if (command.permissions && !(isAdmin || isDev(interaction.user.id))) {
-			for (const perm of command.permissions){
-				const permroles = client.db.guilds.get(`data.${guild.id}.permissions.${perm}`, []);
-				if (!anyIn(permroles, roles)) {
-
-					embed.setColor(color.error);
-					embed.setDescription(`${emoji.error} You do not have permission to use this command.\nYou need the \`${perm}\` custom permission.`);
-					embed.setFooter({ text: `You can change which roles have these permissions with the command /permissions` });
-
-					return interaction.editReply({
-						embeds: [embed]
-					});
-				}
+		if (command.permissions /*&& !isDev(interaction.user.id)*/) {
+			const imsafe = client.db.guilds.get(`data.${guild.id}.imsafe`) ?? false;
+			if (!imsafe){
+				return await imsafeWarning(interaction);
 			}
 		}
 

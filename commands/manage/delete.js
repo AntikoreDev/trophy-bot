@@ -7,6 +7,7 @@ module.exports = {
 	permissions: ['manage_trophies'],
 	data: new SlashCommandBuilder()
 		.setName('delete')
+		.setDefaultMemberPermissions("0")
 		.setDescription('Delete a trophy from your server.')
 		.addStringOption(option => option.setName('trophy').setDescription('Name or ID of the trophy to delete').setRequired(true)),
 

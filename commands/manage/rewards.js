@@ -6,6 +6,7 @@ module.exports = {
 	permissions: ['manage_rewards'],
 	data: new SlashCommandBuilder()
 		.setName('rewards')
+		.setDefaultMemberPermissions("0")
 		.setDescription('Create a new trophy for your server.')
 		.addSubcommand(subcommand =>
 			subcommand

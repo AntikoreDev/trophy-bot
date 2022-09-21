@@ -16,6 +16,18 @@ const color = {
 	success: "#32CD32",
 }
 
+async function imsafeWarning(interaction){
+	const embed = new Discord.MessageEmbed();
+
+	embed.setColor(color.error);
+	embed.setTitle(':warning: WARNING! You\'re running unsafe mode');
+	embed.setDescription(`As of 1.4, custom permissions have been deprecated as you can manage each slash command permission requirements on discord itself.\n As these are deprecated, this message avoids anyone using any management commands for the bad, so you may have to change Discord permissions for these commands before going to safe mode\nYou can change them on \`Server Settings > Integrations > Trophy Bot\`.\nYou can ask help on this in our [Support Server](https://discord.gg/kNmgU44xgU)\nAfter choosing permissions for the commands, use \`/imsafe\` to make these commands work again. **MAKE SURE YOU SET PERMISSIONS CORRECTLY TO AVOID ANYONE CREATING OR MANAGING TROPHIES**\n\n**Fun reminder,** commands that used to have custom permissions were: \`/award\`, \`/revoke\`, \`/clear\`, \`/create\`, \`/delete\`, \`/edit\`, \`/panel\` and \`/rewards\``);
+
+	return await interaction.editReply({
+		embeds: [embed]
+	});
+}
+
 async function getDedication(guild, dedication, config){
 	const name = dedication.name;
 	const id = dedication.user;
@@ -381,6 +393,11 @@ async function getServer(client, id, guild){
 			manage_users: [],
 			manage_rewards: []
 		},
+		imsafe: true,
+		restapi: {
+			token: '',
+			enabled: false,
+		}
 	};
 
 	// Set server data and return it
@@ -603,7 +620,7 @@ module.exports = {
 	sleep, changeActivity, updatePanels, doRewardRoles,
 
 	// Output
-	showError, showSuccess, showCooldown, timeFormat, updatePanel,
+	showError, showSuccess, showCooldown, timeFormat, updatePanel, imsafeWarning,
 
 	// Math
 	clamp, getPage, getMedal,

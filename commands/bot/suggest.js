@@ -6,41 +6,17 @@ module.exports = {
 	cooldown: 10,
 	data: new SlashCommandBuilder()
 		.setName('suggest')
-		.setDescription('Suggest a feature or change for the bot.')
-		.addStringOption(option => option.setName('suggestion').setDescription('Suggestion you want to make').setRequired(true)),
+		.setDescription('Suggest a feature or change for the bot. (Now just an advice to join the support server to suggest)'),
 
 	async run (interaction) {
-		const client = interaction.client;
+
 		const embed = new Discord.MessageEmbed();
 
-		const suggestion = interaction.options.get('suggestion')?.value;
-
-		if (!client.suggestionChannel){
-			embed.setColor(color.error);
-			embed.setDescription(`${emoji.error} Sorry! Looks like the dev did something dum dum and the bot cannot send your suggestion. You may tell him to fix it.\nRefer to [Github Issues](https://github.com/Aidanete/trophy-bot) to report this issue.`);
-		
-			return interaction.editReply({
-				embeds: [embed]
-			});
-		}
-
 		embed.setColor(color.main);
-		embed.setTitle(':outbox_tray: Suggestion Sent');
-		embed.setDescription(`Your suggestion has been sent to the developers. You won't receive any feedback but if your suggestion was accepted, it may appear in the bot sooner or later.`);
+		embed.setTitle(':people_hugging: Migrating Suggestions');
+		embed.setDescription(`Since 1.4, to suggest features and report issues you must go to our [Support Server](https://discord.gg/kNmgU44xgU)\n**Thanks for using our bot! :heart:**`);
 
 		await interaction.editReply({
-			embeds: [embed]
-		});
-
-		embed.setColor(color.main);
-		embed.setTitle(':inbox_tray: Suggestion Received');
-		embed.addField(`Suggestion`, `\u200b${suggestion}`);
-		embed.setAuthor({ name: `${interaction.user.username}`, iconURL: interaction.user.displayAvatarURL({ format: 'png', dynamic: true }) });
-		embed.setTimestamp();
-		embed.setDescription(``);
-
-		const channel = client.suggestionChannel;
-		const message = await channel.send({
 			embeds: [embed]
 		});
 	}

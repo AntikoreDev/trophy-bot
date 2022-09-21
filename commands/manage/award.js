@@ -6,6 +6,7 @@ module.exports = {
 	permissions: ['manage_users'],
 	data: new SlashCommandBuilder()
 		.setName('award')
+		.setDefaultMemberPermissions("0")
 		.setDescription('Award a trophy for an user.')
 		.addStringOption(option => option.setName('trophy').setDescription('Name or ID of the trophy to award').setRequired(true))
 		.addUserOption(option => option.setName('user').setDescription('User to award the trophy to').setRequired(true))

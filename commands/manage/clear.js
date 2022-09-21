@@ -6,6 +6,7 @@ module.exports = {
 	permissions: ['manage_users'],
 	data: new SlashCommandBuilder()
 		.setName('clear')
+		.setDefaultMemberPermissions("0")
 		.setDescription('Clear all trophies and resets the score of an user to 0.')
 		.addUserOption(option => option.setName('user').setDescription('User to award the trophy to').setRequired(true)),
 
