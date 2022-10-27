@@ -2,14 +2,14 @@ const fs = require('fs');
 const path = require('path');
 
 const Discord = require('discord.js');
-const Intents = Discord.Intents.FLAGS;
+const Intents = Discord.GatewayIntentBits;
 
 const client = new Discord.Client({
 	intents: [
-		Intents.GUILD_MESSAGES,
-		Intents.GUILD_MEMBERS,
-		Intents.GUILD_EMOJIS_AND_STICKERS,
-		Intents.GUILDS
+		Intents.GuildMessages,
+		Intents.GuildMembers,
+		Intents.GuildEmojisAndStickers,
+		Intents.Guilds
 	]
 });
 

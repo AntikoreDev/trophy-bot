@@ -1,6 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color } = require('../../globals');
-const Discord = require('discord.js');
 
 module.exports = {
 	cooldown: 10,
@@ -10,7 +9,7 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		embed.setColor(color.main);
 		embed.setTitle(':people_hugging: Migrating Suggestions');

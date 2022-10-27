@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color } = require('../../globals');
 
 module.exports = {
@@ -9,7 +8,7 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		embed.setColor(color.main);
 		embed.setTitle(`Invite Me to Your Server!`);

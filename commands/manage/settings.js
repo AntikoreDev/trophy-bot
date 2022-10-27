@@ -1,6 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color, emoji, settings, parseName, checkName } = require('../../globals');
-const Discord = require('discord.js');
 
 const available = settings.map(n => n.id);
 
@@ -26,7 +25,7 @@ module.exports = {
 					
 	async run (interaction){
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		const client = interaction.client;
 		const guild = interaction.guild.id;

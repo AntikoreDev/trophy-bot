@@ -1,12 +1,13 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
-const { color, emoji, parseName, checkName } = require('../../globals');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { color, } = require('../../globals');
 
+/*
 const permissions = [
 	'manageusers',
 	'managetrophies',
 	'managerewards'
-]
+];
+*/
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -43,6 +44,18 @@ module.exports = {
 
 	async run (interaction) {
 
+		const embed = new EmbedBuilder()
+			.setColor(color.error)
+			.setTitle(":warning: Caution!")
+			.setDescription(`Custom permission system has been deprecated as Discord already supports custom permissions.\nRefer to [Slash Commands Permissions](https://discord.com/blog/slash-commands-permissions-discord-apps-bots)\nIf you didn't notice this change yet, all bot commands have been disabled until you run \`/imsafe\` after you set the correct permissions.\n**If you don't change the permissions with Discord permission system with adequate ones, and you run that command, every command that used this system will be available for everyone, beware!**\n\nAgain, my apologies as I didn't know about that feature when I was making the bot. After setting permissions through Discord itself and running \`/imsafe\` everything will go back to normal.\n\nAny additional help you need on this, you can ask on our [Support Server](https://discord.gg/kNmgU44xgU)`)
+
+		interaction.editReply({
+			embeds: [embed]
+		})
+
+		return;
+
+		/*
 		const embed = new Discord.MessageEmbed();
 
 		const client = interaction.client;
@@ -184,5 +197,6 @@ module.exports = {
 		return interaction.editReply({
 			embeds: [embed]
 		});
+	*/
 	}
 }

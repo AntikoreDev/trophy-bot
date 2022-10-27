@@ -1,23 +1,23 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color, emoji: emojis, parseUser, getTrophy, downloadImage } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_trophies'],
 	data: new SlashCommandBuilder()
 		.setName('edit')
-		.setDefaultMemberPermissions("0")
+		.setDefaultMemberPermissions("32")
 		.setDescription('Edit an existing trophy for your server.')
 		.addStringOption(option => option.setName('trophy').setDescription('The trophy to be edited').setRequired(true))
 		.addStringOption(option => option.setName('name').setDescription('The new name of the trophy.').setRequired(false))
 		.addStringOption(option => option.setName('description').setDescription('The new description for the trophy').setRequired(false))
 		.addStringOption(option => option.setName('emoji').setDescription('A new emoji for the trophy, leave blank for default').setRequired(false))
 		.addStringOption(option => option.setName('dedication').setDescription('A new dedication for the trophy').setRequired(false))
+		.addStringOption(option => option.setName('details').setDescription('A new details text for the trophy').setRequired(false))
 		.addAttachmentOption(option => option.setName('image').setDescription('A new image for the trophy').setRequired(false)),
 		
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 		
 		const client = interaction.client;
 		const guild = interaction.guild.id;
@@ -37,6 +37,9 @@ module.exports = {
 		const current = client.db.guilds.get(`data.${guild}.trophies.${id}`);
 
 		const value = current.value;
+		const signed = current.signed;
+		const creator = current.creator;
+		const created = current.created;
 
 		const name = interaction.options?.get('name')?.value || current.name;
 		const desc = interaction.options?.get('description')?.value || current.description;
@@ -44,12 +47,23 @@ module.exports = {
 		// const value = interaction.options?.get('value')?.value || current.value;
 		const image = interaction.options?.getAttachment('image')?.url || current.image;
 		const dedic = interaction.options?.get('dedication')?.value || null;
+		const details = interaction.options?.get('details')?.value || current.details || "No details provided.";
 
 				// Error handling
 		// If name is too long
 		if (name.length > 32){
 			embed.setColor(color.error);
 			embed.setDescription(`${emojis.error} The name of the trophy is too long.`);
+
+			return interaction.editReply({
+				embeds: [embed]
+			});
+		}
+
+		// If desc is too long
+		if (details.length > 300){
+			embed.setColor(color.error);
+			embed.setDescription(`${emojis.error} The details of the trophy are too long.`);
 
 			return interaction.editReply({
 				embeds: [embed]
@@ -136,7 +150,7 @@ module.exports = {
 			if (!(['png', 'jpg', 'jpeg', 'gif'].includes(extension))) {
 				return interaction.editReply({
 					embeds: [
-						new Discord.MessageEmbed()
+						new EmbedBuilder()
 							.setColor(color.error)
 							.setDescription(`${emojis.error} The image must be a png, gif, jpg or jpeg.`)
 					]
@@ -146,7 +160,7 @@ module.exports = {
 			if (image.size > 1000000){
 				return interaction.editReply({
 					embeds: [
-						new Discord.MessageEmbed()
+						new EmbedBuilder()
 							.setColor(color.error)
 							.setDescription(`${emojis.error} The image must not be larger than \`1 MB\``)
 					]
@@ -157,17 +171,21 @@ module.exports = {
 		}
 		
 		client.db.guilds.set(`data.${guild}.trophies.${id}`, {
+			creator,
+			created,
 			name,
 			description: desc,
 			emoji,
 			value,
 			image: image,
-			dedication
+			dedication,
+			details,
+			signed
 		});
 
 		embed.setColor(color.main);
 		embed.setDescription(`${emojis.success} **${current.name}** was edited successfully!`);
-		embed.addField(`Changes`, changes.join('\n'));
+		embed.addFields({ name: `Changes`, value: changes.join('\n') });
 
 		interaction.editReply({
 			embeds: [embed]

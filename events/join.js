@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { color } = require('../globals');
 
 // Note from the developer, I hate interactions and the whole slash command system.
@@ -17,7 +17,7 @@ module.exports = {
 			const first = guild.client.db.bot.get(`data.milestone`) ?? null;
 			if (first == null){
 
-				const embed = new Discord.MessageEmbed();
+				const embed = new EmbedBuilder();
 
 				embed.setColor(color.success);
 				embed.setTitle(`:tada: Trophy Bot got to 75 servers!`);

@@ -1,12 +1,11 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color, emoji, getTrophy, doRewardRoles } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_users'],
 	data: new SlashCommandBuilder()
 		.setName('revoke')
-		.setDefaultMemberPermissions("0")
+		.setDefaultMemberPermissions("32")
 		.setDescription('Revoke a trophy from an user.')
 		.addStringOption(option => option.setName('trophy').setDescription('Name or ID of the trophy to revoke').setRequired(true))
 		.addUserOption(option => option.setName('user').setDescription('User to revoke the trophy from').setRequired(true))
@@ -14,7 +13,7 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		const client = interaction.client;
 		const guild = interaction.guild.id;

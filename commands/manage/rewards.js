@@ -1,12 +1,11 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
-const { color, emoji: emojis, parseUser, getPage } = require('../../globals');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { color, emoji: emojis, getPage } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_rewards'],
 	data: new SlashCommandBuilder()
 		.setName('rewards')
-		.setDefaultMemberPermissions("0")
+		.setDefaultMemberPermissions("32")
 		.setDescription('Create a new trophy for your server.')
 		.addSubcommand(subcommand =>
 			subcommand
@@ -35,7 +34,7 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		const client = interaction.client;
 		const guild = interaction.guild.id;
@@ -205,7 +204,7 @@ module.exports = {
 			embed.setDescription(`**Your score:** ${score} :medal:`);
 			
 			embed.setTitle(`${guildName}'s Role Rewards`);
-			embed.addField(`Rewards`, `\u200b` + pages.list.join(`\n`));
+			embed.addFields({ name: `Rewards`, value: `\u200b` + pages.list.join(`\n`) });
 			
 			return interaction.editReply({
 				embeds: [embed]

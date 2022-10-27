@@ -1,6 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder, Collection } = require('discord.js');
 const { color, emoji, getMedal, getPage, isInServer, getSetting, parseFormat, attemptFetchIfCacheCleared } = require('../../globals');
-const Discord = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,7 +9,7 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		const client = interaction.client;
 		const guild = interaction.guild.id;	
@@ -18,7 +17,7 @@ module.exports = {
 		const page = interaction.options?.get('page')?.value || 1;
 		const users = client.db.guilds.get(`data.${guild}.users`) || {};
 
-		const list = new Discord.Collection();
+		const list = new Collection();
 		let total = 0;
 
 		const keys = Object.keys(users);
@@ -49,7 +48,7 @@ module.exports = {
 		embed.setColor(color.main);
 		embed.setTitle(`${emoji.trophy} ${interaction?.guild?.name ?? 'Server'}'s Leaderboard`);
 		embed.setDescription(`Total server score: **${total}** :medal:`);
-		embed.addField(`Leaderboard`, top.length ? top.join('\n') : `No scores yet`);
+		embed.addFields({ name: `Leaderboard`, value: top.length ? top.join('\n') : `No scores yet` });
 		embed.setFooter({ text: `Page ${pages.page} of ${pages.last}` });
 
 		return interaction.editReply({

@@ -1,6 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color, emoji, getTrophy, getSetting, getDedication } = require('../../globals');
-const Discord = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,7 +9,7 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 		
 		const client = interaction.client;
 		const guild = interaction.guild.id;
@@ -43,7 +42,7 @@ module.exports = {
 		embed.setTitle(`${emoj} ${name}`);
 		embed.setImage(image.startsWith(`https://`) ? image : `attachment://${image}`);
 		embed.setDescription(`${desc}`);
-		embed.addField('Value', `\u200b${value} :medal:`, true);
+		embed.addFields({ name: 'Value', value: `\u200b${value} :medal:`, inline: true });
 		embed.setFooter({
 			text: `Trophy ID: ${id}`,
 		});
@@ -51,13 +50,13 @@ module.exports = {
 		
 
 		if (signed){
-			embed.addField('Signed by', `\u200b<@${creator}>`, true);
+			embed.addFields({ name: 'Signed by', value: `\u200b<@${creator}>`, inline: true });
 		}
 		
 		const config = getSetting(client, guild, 'dedication_display');
 		if (dedication.name){
 			const dedic = await getDedication(interaction.guild, dedication, config);
-			if (dedic) embed.addField('Dedicated to', `\u200b${dedic}`, true);
+			if (dedic) embed.addFields({ name: 'Dedicated to', value: `\u200b${dedic}`, inline: true });
 		}
 
 		interaction.editReply({

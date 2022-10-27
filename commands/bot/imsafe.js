@@ -1,6 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
-const { color, emoji, parseName, checkName } = require('../../globals');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { color } = require('../../globals');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,7 +13,7 @@ module.exports = {
 
 		const imsafe = client.db.guilds.get(`data.${guild}.imsafe`) ?? false;
 		
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		if (imsafe){
 			embed.setColor(color.blue);

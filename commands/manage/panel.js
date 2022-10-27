@@ -1,11 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { emoji, color, updatePanel, showSuccess, showError } = require('../../globals');
 
 module.exports = {
 	permissions: ['manage_users'],
 	data: new SlashCommandBuilder()
-		.setDefaultMemberPermissions("0")
+		.setDefaultMemberPermissions("32")
 		.setName('panel')
 		.setDescription('Create a leaderboard panel. You can only have one panel at a time.')
 		.addSubcommand(subcommand =>
@@ -38,7 +37,7 @@ module.exports = {
 				await updatePanel(client, interaction.guild);
 				return interaction.deleteReply();
 			} catch {
-				const embed = new Discord.MessageEmbed();
+				const embed = new EmbedBuilder();
 				embed.setColor(color.error);
 				embed.setDescription(showError('Failed to create panel. Check channel and bot permissions. If issue persists, join our [Support Server](https://discord.gg/kNmgU44xgU).'));
 
@@ -51,7 +50,7 @@ module.exports = {
 		else if (subcommand === 'delete'){
 			client.db.guilds.delete(`data.${guild}.panel`);
 
-			const embed = new Discord.MessageEmbed();
+			const embed = new EmbedBuilder();
 			embed.setColor(color.success);
 			embed.setDescription(showSuccess(`Sucessfully **deleted** the panel.`));
 

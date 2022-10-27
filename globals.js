@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { EmbedBuilder, Collection } = require('discord.js');
 
 const fetch = require('node-fetch');
 const { writeFile } = require('fs');
@@ -17,7 +17,7 @@ const color = {
 }
 
 async function imsafeWarning(interaction){
-	const embed = new Discord.MessageEmbed();
+	const embed = new EmbedBuilder();
 
 	embed.setColor(color.error);
 	embed.setTitle(':warning: WARNING! You\'re running unsafe mode');
@@ -165,9 +165,14 @@ async function parseFormat(config, guild, id, pre = "Unknown User"){
 }
 
 async function doRewardRoles(client, guild, id){
+
+	let me = guild.me;
+	if (me == undefined){
+		me = await guild.members.fetch(client.user.id);
+	}
 	
 	// Check if the bot has the manage roles permission
-	const manageRoles = guild.me.permissions.has('MANAGE_ROLES');
+	const manageRoles = me.permissions.has('MANAGE_ROLES');
 	if (!manageRoles) return;
 
 	// Get all the reward roles
@@ -232,6 +237,12 @@ function checkName(first, second){
 	return second.includes(first);
 }
 
+function getTrophyCount(client, guild){
+	const list = client.db.guilds.get(`data.${guild}.trophies`) ?? {};
+	const count = Object.getOwnPropertyNames(list).length - 1;
+	return count;
+}
+
 async function cleanseTrophies(client, guild, trophy, value){
 	const users = client.db.guilds.get(`data.${guild}.users`);
 	for (const id in users){
@@ -273,7 +284,7 @@ async function attemptFetchIfCacheCleared(keys, guild){
 async function fetchModules(dir, ext = '.js', command = false, first = true){
 
 	// Create a collection for all the modules
-	let collection = new Discord.Collection();
+	let collection = new Collection();
 	let commands = [];
 
 	// Get all files from the directory, and iterate over them
@@ -345,6 +356,22 @@ async function fetchModules(dir, ext = '.js', command = false, first = true){
 	};
 }
 
+async function forgetMe(client, guild){
+	const trophies = client.db.guilds.get(`data.${guild.id}.trophies`) ?? null;
+	if (trophies != null){
+		const keys = Object.keys(trophies).filter(m => m != "current");
+		
+		for (const tr of keys){
+			const image = trophies[tr]?.image;
+			if (image != null){
+				await fs.unlink(`./images/${image}`, function (err) {});
+			}
+		}
+	}
+	await client.db.guilds.set(`data.${guild.id}`, -1);
+	await guild.leave();
+}
+
 // If the ID is the Dev's ID
 function isDev(id){
 	return (id === '353998390734094346');
@@ -359,7 +386,6 @@ const supportServer = '985439832388042822';
 
 const testingServers = [
 	'985439832388042822',
-	// '631540341148876800',
 ]
 
 
@@ -375,7 +401,9 @@ async function getServer(client, id, guild){
 
 	// If the server id is on the database, then return it
 	if (client.db.guilds.has(`data.${id}`)){
-		return client.db.guilds.get(`data.${id}`);
+		let value = client.db.guilds.get(`data.${id}`);
+		if (value != -1)
+			return value;
 	}
 
 	// Create the server data if it doesn't exist
@@ -546,12 +574,12 @@ async function updatePanel(client, guild){
 	const message = await channel.messages.fetch(panel.message);
 	if (!message) return;
 
-	const embed = new Discord.MessageEmbed();
+	const embed = new EmbedBuilder();
 
 	const page = 1;
 	const users = client.db.guilds.get(`data.${id}.users`) || {};
 
-	const list = new Discord.Collection();
+	const list = new Collection();
 	let total = 0;
 
 	const keys = Object.keys(users);
@@ -582,7 +610,7 @@ async function updatePanel(client, guild){
 	embed.setColor(color.main);
 	embed.setTitle(`${emoji.trophy} ${guild?.name ?? 'Server'}'s Leaderboard`);
 	embed.setDescription(`Total server score: **${total}** :medal:`);
-	embed.addField(`Leaderboard`, top.length ? top.join('\n') : `No scores yet`);
+	embed.addFields({ name: `Leaderboard`, value: top.length ? top.join('\n') : `No scores yet` });
 
 	return await message.edit({
 		content: `\u200b`,
@@ -614,10 +642,10 @@ module.exports = {
 	fetchModules, getServer, downloadImage, AttemptToFetchUsers, isInServer, attemptFetchIfCacheCleared,
 
 	// Technical
-	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric,
+	isDev, isOnSnowflakeRange, isBanned, isAlphanumeric, 
 
 	// Runtime
-	sleep, changeActivity, updatePanels, doRewardRoles,
+	sleep, changeActivity, updatePanels, doRewardRoles, forgetMe,
 
 	// Output
 	showError, showSuccess, showCooldown, timeFormat, updatePanel, imsafeWarning,
@@ -629,7 +657,7 @@ module.exports = {
 	parseUser, parseName, parseFormat, clearMentions, getDedication,
 
 	// Database
-	getTrophy, cleanseTrophies, getSetting,
+	getTrophy, cleanseTrophies, getSetting, getTrophyCount,
 
 	// Comparison
 	checkName, anyIn,

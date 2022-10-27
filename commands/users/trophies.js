@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder, Collection } = require('discord.js');
 const { color, emoji, getPage, parseUser, getSetting, anyIn } = require('../../globals');
 
 module.exports = {
@@ -20,7 +19,7 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 		
 		const client = interaction.client;
 		const guild = interaction.guild.id;
@@ -51,7 +50,7 @@ module.exports = {
 			const userObject = await parseUser(client, user, interaction.user.username, interaction.guild, true);
 			const username = userObject.username;
 
-			const sorted = new Discord.Collection(Object.entries(trophyInventory)).sort(
+			const sorted = new Collection(Object.entries(trophyInventory)).sort(
 				(a, b) => {
 					return b.value - a.value;
 				}
@@ -79,7 +78,7 @@ module.exports = {
 			embed.setTitle(`${emoji.trophy} ${username}'s Trophies`);
 
 			embed.setDescription(`Total score: **${score}** :medal:`);
-			embed.addField('Trophies', pages.list.length ? pages.list.join('\n') : 'No trophies yet.');
+			embed.addFields({ name: 'Trophies', value: pages.list.length ? pages.list.join('\n') : 'No trophies yet.' });
 
 			embed.setFooter({ 
 				text: `Page ${pages.page} of ${pages.last}`,
@@ -139,7 +138,7 @@ module.exports = {
 			embed.setTitle(`${emoji.trophy} Server Trophies`);
 
 			embed.setDescription(`Total trophies created: **${trophies.length}**`);
-			embed.addField('Trophies', pages.list.length ? pages.list.join('\n') : 'No trophies yet.');
+			embed.addFields({ name: 'Trophies', value: pages.list.length ? pages.list.join('\n') : 'No trophies yet.' });
 
 			embed.setFooter({ 
 				text: `Page ${pages.page} of ${pages.last}`,

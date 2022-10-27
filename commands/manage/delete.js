@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color, emoji, getTrophy, cleanseTrophies } = require('../../globals');
 const fs = require('fs');
 
@@ -7,13 +6,13 @@ module.exports = {
 	permissions: ['manage_trophies'],
 	data: new SlashCommandBuilder()
 		.setName('delete')
-		.setDefaultMemberPermissions("0")
+		.setDefaultMemberPermissions("32")
 		.setDescription('Delete a trophy from your server.')
 		.addStringOption(option => option.setName('trophy').setDescription('Name or ID of the trophy to delete').setRequired(true)),
 
 	async run (interaction) {
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 		
 		const client = interaction.client;
 		const guild = interaction.guild.id;

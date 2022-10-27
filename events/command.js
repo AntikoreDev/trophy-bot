@@ -1,13 +1,15 @@
 const { getServer, anyIn, color, emoji, isDev, AttemptToFetchUsers, imsafeWarning } = require("../globals");
-const Discord = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
-// Note from the developer, I hate interactions and the whole slash command system.
 module.exports = {
 	name: 'interactionCreate',
 	once: false,
 	async run (interaction) {
 
-		if (!interaction.inGuild()) return; 
+		if (!interaction.inGuild()) return;
+
+		// If it's not a command, then WHY the heck is it here?
+		if (!interaction.isCommand()) return;
 
 		await interaction.deferReply();
 
@@ -21,15 +23,12 @@ module.exports = {
 		// Fetch how many users is the bot serving
 		AttemptToFetchUsers(client);
 
-		// If it's not a command, then WHY the heck is it here?
-		if (!interaction.isCommand()) return;
-
 		if (!client.commands) return;
 
 		const command = client.commands.get(commandName);
 		const user = await interaction.member.fetch();
 
-		const embed = new Discord.MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		if (!command) return;
 
@@ -37,7 +36,7 @@ module.exports = {
 		const roles = user.roles.cache.map(role => role.id);
 		const isAdmin = (await client.channels.fetch(interaction.channelId)).permissionsFor(interaction.member).toArray().includes('ADMINISTRATOR');
 
-		if (command.permissions /*&& !isDev(interaction.user.id)*/) {
+		if (command.permissions && !isDev(interaction.user.id)) {
 			const imsafe = client.db.guilds.get(`data.${guild.id}.imsafe`) ?? false;
 			if (!imsafe){
 				return await imsafeWarning(interaction);
@@ -54,16 +53,17 @@ module.exports = {
 		} catch (error) {
 			console.error(error);
 		
+			// If the error channel exists, send a log with the issue
 			if (client.errorChannel !== null){
 				try {
 	
 					const stack = error.stack.slice(0, 900) + "...";
 					
-					const embed = new Discord.MessageEmbed();
+					const embed = new EmbedBuilder();
 					embed.setTitle(`${emoji.error} Error Log`);
 					embed.setColor(color.error);
 					embed.setDescription(`**Command:** \`${interaction.toString()}\`\n**Perpetrator:** \`${interaction.user.id}\`\n**Guild:** \`${interaction.guild.id}\``);
-					embed.addField(`Stacktrace`, `\`\`\`js\n${stack}\`\`\``);
+					embed.addFields({ name: `Stacktrace`, value: `\`\`\`js\n${stack}\`\`\`` });
 	
 					client.errorChannel.send({
 						embeds: [embed]
@@ -75,9 +75,10 @@ module.exports = {
 				}
 			}
 
+			// If there was no interaction at all
 			if (!interaction) return;
 
-			const errorEmbed = new Discord.MessageEmbed();
+			const errorEmbed = new EmbedBuilder();
 			errorEmbed.setDescription(`${emoji.error} There was an error while executing this command!\nYou can join our [support server](https://discord.gg/kNmgU44xgU) to report the issue`);
 			errorEmbed.setFooter({ text: 'Errors are automatically delivered to the developer, it may be fixed in about 1 to 24 hours, but reporting will help to quick the process' });
 			errorEmbed.setColor(color.error);
