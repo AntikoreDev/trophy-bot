@@ -47,8 +47,6 @@ module.exports = {
 			text: `Trophy ID: ${id}`,
 		});
 		
-		
-
 		if (signed){
 			embed.addFields({ name: 'Signed by', value: `\u200b<@${creator}>`, inline: true });
 		}

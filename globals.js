@@ -385,7 +385,7 @@ function isBanned(id){
 const supportServer = '985439832388042822';
 
 const testingServers = [
-	'985439832388042822',
+	'985439832388042822'
 ]
 
 

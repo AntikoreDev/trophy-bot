@@ -16,7 +16,7 @@ module.exports = {
 		const embed = new EmbedBuilder();
 
 		if (imsafe){
-			embed.setColor(color.blue);
+			embed.setColor(color.main);
 			embed.setDescription(":white_check_mark: You're currently on safe mode :)");
 
 			return await interaction.editReply({
@@ -26,7 +26,7 @@ module.exports = {
 
 		client.db.guilds.set(`data.${guild}.imsafe`, true);
 
-		embed.setColor(color.blue);
+		embed.setColor(color.main);
 		embed.setDescription(":white_check_mark: You have set your server as safe! (Hopefully everything is ok)");
 
 		return await interaction.editReply({
