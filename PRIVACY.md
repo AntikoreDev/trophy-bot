@@ -21,3 +21,5 @@ When the bot handles an exception, it sends info about the error, including the 
 ## How can I remove my data?
 Kicking the bot from your server won't remove any data stored for your server from it, for security reasons, but you can remove all of the data for your server including images using the command `/forgetme` without persistence (this will kick the bot itself too).
 This command is only enabled to be performed by the server owner, to avoid malicious behaviour.
+
+Any other questions you have about this, ask freely on the [Support Server](https://discord.gg/kNmgU44xgU)
