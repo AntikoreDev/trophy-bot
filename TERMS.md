@@ -6,4 +6,4 @@ By using [Trophy Bot](https://github.com/AntikoreDev/trophy-bot), you're implici
 * While using the bot you must agree with [Discord Terms of Service](https://discord.com/terms) and [Guidelines](https://discord.com/guidelines) as well.
 * We are not responsible of any malicious use of the bot done by you or anyone else.
 * Any use of this bot for any illegal and/or malicious behavior may result in revoking your rights to it.
-* We reserve the right to remove any content generated with the service at any time if needed.
+* We reserve the right to remove any content generated with the bot at any time if needed without previous notice.
