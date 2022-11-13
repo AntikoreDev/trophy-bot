@@ -13,7 +13,7 @@ Awards and rewards are also stored to make the bot work properly, this means tha
 
 Trophies are per-server, and the Server ID is saved to be linked to every content created with the bot.<br>
 
-When the bot handles an exception, it sends info about the error, including the command itself.
+When the bot handles an exception, it sends info about the error, including the command itself, to the developer through Discord.
 
 ## What data is visible for others?
 [Trophy Bot](https://github.com/AntikoreDev/trophy-bot) works per server, and there is no way for other server to see trophies on yours, and no way to share any content between servers apart from the total trophy count and award count in the `/stats` command.
