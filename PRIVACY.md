@@ -16,7 +16,7 @@ Trophies are per-server, and the Server ID is saved to be linked to every conten
 When the bot handles an exception, it sends info about the error, including the command itself, to the developer through Discord.
 
 ## What data is visible for others?
-[Trophy Bot](https://github.com/AntikoreDev/trophy-bot) works per server, and there is no way for other server to see trophies on yours, and no way to share any content between servers apart from the total trophy count and award count in the `/stats` command.
+[Trophy Bot](https://github.com/AntikoreDev/trophy-bot) works per server, and there is no way for other server to see trophies on yours, and no way to share any content between servers apart from the total trophy count, total award count and total commands ran in the `/stats` command.
 
 ## How can I remove my data?
 Kicking the bot from your server won't remove any data stored for your server from it, for security reasons, but you can remove all of the data for your server including images using the command `/forgetme` without persistence (this will kick the bot itself too).
