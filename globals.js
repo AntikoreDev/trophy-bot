@@ -636,6 +636,30 @@ const booleans = {
 	false: ['no', 'n', 'false', 'f', '0', 'off']
 }
 
+const sortmethods = [
+	{
+		name: "By value",
+		id: "value",
+		func(a, b){
+			return object[b].value - object[a].value;
+		}
+	},
+	{
+		name: "A-Z",
+		id: "az",
+		func(a, b){
+			return object[b].name.localeCompare(object[a].name);
+		}
+	},
+	{
+		name: "Z-A",
+		id: "za",
+		func(a, b){
+			return -object[b].name.localeCompare(object[a].name);
+		}
+	}
+]
+
 module.exports = {
 
 	// Fetching
@@ -663,5 +687,5 @@ module.exports = {
 	checkName, anyIn,
 
 	// Colors, emojis, etc.
-	color, emoji, booleans, testingServers, settings, supportServer
+	color, emoji, booleans, testingServers, settings, supportServer, sortmethods
 }
