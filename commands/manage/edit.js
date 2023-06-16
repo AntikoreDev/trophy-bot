@@ -13,6 +13,7 @@ module.exports = {
 		.addStringOption(option => option.setName('emoji').setDescription('A new emoji for the trophy, leave blank for default').setRequired(false))
 		.addStringOption(option => option.setName('dedication').setDescription('A new dedication for the trophy').setRequired(false))
 		.addStringOption(option => option.setName('details').setDescription('A new details text for the trophy').setRequired(false))
+		.addBooleanOption(option => option.setName('tradeable').setDescription('A new tradeability status for the trophy').setRequired(false))
 		.addAttachmentOption(option => option.setName('image').setDescription('A new image for the trophy').setRequired(false)),
 		
 	async run (interaction) {
@@ -47,6 +48,7 @@ module.exports = {
 		// const value = interaction.options?.get('value')?.value || current.value;
 		const image = interaction.options?.getAttachment('image')?.url || current.image;
 		const dedic = interaction.options?.get('dedication')?.value || null;
+		const tradeable = interaction.options?.get('tradeable')?.value ?? false;
 		const details = interaction.options?.get('details')?.value || current.details || "No details provided.";
 
 				// Error handling
@@ -132,6 +134,8 @@ module.exports = {
 		if (emoji != current.emoji) 		changes.push(`**Emoji:** ${current.emoji} > ${emoji}`);
 		// if (value != current.value) 		changes.push(`**Value:** ${current.value} > ${value}`);
 		if (dedic) 							changes.push(`**Dedication:** ${current.dedication.name ? current.dedication.name : `No dedication`} > ${dedication.name}`);
+		if (tradeable != current.tradeable) changes.push(`**Tradeability:** ${current.tradeable} > ${tradeable}`);
+		if (details != current.details) 	changes.push(`**Details changed**`);
 		if (image != current.image) 		changes.push(`**Changed image**`);
 
 		if (!changes.length){
@@ -180,7 +184,8 @@ module.exports = {
 			image: image,
 			dedication,
 			details,
-			signed
+			signed,
+			tradeable
 		});
 
 		embed.setColor(color.main);
