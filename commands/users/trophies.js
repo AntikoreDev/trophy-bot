@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder, Collection } = require('discord.js');
-const { color, emoji, getPage, parseUser, getSetting, anyIn } = require('../../globals');
+const { color, emoji, sortmethods, getPage, parseUser, getSetting, anyIn } = require('../../globals');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,11 +10,17 @@ module.exports = {
 			.setDescription('Show the trophies any user has.')
 			.addUserOption(option => option.setName('user').setDescription('User to check trophies').setRequired(false))
 			.addIntegerOption(option => option.setName('page').setDescription('Page to look at').setRequired(false))
+			.addStringOption(option => option.setName('sorting').setDescription('How the trophies will sort').setRequired(false).addChoices(
+				...sortmethods.map(n => ({ name: n.name, value: n.id })),
+			))
 		)
 		.addSubcommand(subcommand => subcommand
 			.setName('guild')
 			.setDescription('Show the trophies any guild has.')
 			.addIntegerOption(option => option.setName('page').setDescription('Page to look at').setRequired(false))
+			.addStringOption(option => option.setName('sorting').setDescription('How the trophies will sort').setRequired(false).addChoices(
+				...sortmethods.map(n => ({ name: n.name, value: n.id })),
+			))
 		),
 
 	async run (interaction) {
