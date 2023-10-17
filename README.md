@@ -1,10 +1,12 @@
 # Trophy Bot
-<a href = "https://github.com/AntikoreDev/trophy-bot" onClick = "return false"><img alt = "Repo size" src = "https://img.shields.io/github/repo-size/AntikoreDev/trophy-bot"></a>
-<a href = "https://github.com/AntikoreDev/trophy-bot/pulls"><img alt = "Pull Requests" src = "https://img.shields.io/github/issues-pr/AntikoreDev/trophy-bot"></a>
-<a href = "https://github.com/AntikoreDev/trophy-bot/issues"><img alt = "Issues" src = "https://img.shields.io/github/issues/AntikoreDev/trophy-bot"></a>
-<a href = "https://github.com/AntikoreDev/trophy-bot/graphs/contributors"><img alt = "Contributors" src = "https://img.shields.io/github/contributors/AntikoreDev/trophy-bot"></a>
-<a href = "https://github.com/AntikoreDev/trophy-bot/stargazers"><img alt = "Stars" src = "https://img.shields.io/github/stars/AntikoreDev/trophy-bot"></a>
-<a href = "https://github.com/AntikoreDev/trophy-bot/blob/main/LICENSE"><img alt = "License" src = "https://img.shields.io/github/license/AntikoreDev/trophy-bot"></a>
+<div align="center">
+  <a href = "https://github.com/AntikoreDev/trophy-bot" onClick = "return false"><img alt = "Repo size" src = "https://img.shields.io/github/repo-size/AntikoreDev/trophy-bot?style=for-the-badge"></a>
+  <a href = "https://github.com/AntikoreDev/trophy-bot/pulls"><img alt = "Pull Requests" src = "https://img.shields.io/github/issues-pr/AntikoreDev/trophy-bot?style=for-the-badge"></a>
+  <a href = "https://github.com/AntikoreDev/trophy-bot/issues"><img alt = "Issues" src = "https://img.shields.io/github/issues/AntikoreDev/trophy-bot?style=for-the-badge"></a>
+  <a href = "https://github.com/AntikoreDev/trophy-bot/graphs/contributors"><img alt = "Contributors" src = "https://img.shields.io/github/contributors/AntikoreDev/trophy-bot?style=for-the-badge"></a>
+  <a href = "https://github.com/AntikoreDev/trophy-bot/stargazers"><img alt = "Stars" src = "https://img.shields.io/github/stars/AntikoreDev/trophy-bot?style=for-the-badge"></a>
+  <a href = "https://github.com/AntikoreDev/trophy-bot/blob/main/LICENSE"><img alt = "License" src = "https://img.shields.io/github/license/AntikoreDev/trophy-bot?style=for-the-badge"></a>
+</div>
 
 **Trophy Bot** is a Discord bot made with [Discord.js](https://github.com/discordjs/discord.js) v14
 
