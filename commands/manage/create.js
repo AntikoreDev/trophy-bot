@@ -13,6 +13,7 @@ module.exports = {
 		.addNumberOption(option => option.setName('value').setDescription('How much this trophy values. Defaults to 10').setRequired(false))
 		.addStringOption(option => option.setName('dedication').setDescription('Dedicate the trophy to someone, defaults to no one. You can use an id or mention as well').setRequired(false))
 		.addBooleanOption(option => option.setName('signed').setDescription('If true, you\'ll sign this trophy as created by you. Defaults to false').setRequired(false))
+		.addBooleanOption(option => option.setName('tradeable').setDescription('If true, people can trade this trophy with other user').setRequired(false))
 		.addAttachmentOption(option => option.setName('image').setDescription('The image for the trophy, only seen on showcase command').setRequired(false))
 		.addStringOption(option => option.setName('details').setDescription("Private details for the trophy, you can set why do you give the trophy here.").setRequired(false)),
 
@@ -33,7 +34,6 @@ module.exports = {
 			return interaction.editReply({
 				embeds: [embed]
 			})
-
 		}
 
 		const name = interaction.options?.get('name')?.value ?? 'New Trophy';
@@ -43,7 +43,8 @@ module.exports = {
 		const image = interaction.options?.getAttachment('image') ?? null;
 		const dedic = interaction.options?.get('dedication')?.value ?? null;
 		const signed = interaction.options?.get('signed')?.value ?? false;
-		const details = interaction.options?.get('details')?.value ?? "No details provided."
+		const tradeable = interaction.options?.get('tradeable')?.value ?? false;
+		const details = interaction.options?.get('details')?.value ?? "No details provided.";
 
 		const embed = new EmbedBuilder();
 
@@ -158,6 +159,7 @@ module.exports = {
 			image: image?.url ? `${guild}_${next}.${extension}` : null,
 			dedication,
 			details,
+			tradeable,
 			signed
 		});
 

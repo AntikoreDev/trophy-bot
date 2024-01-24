@@ -1,6 +1,4 @@
 module.exports = {
 	id: 'es',
-	entries: {
-		
-	}
+	entries: {}
 }
