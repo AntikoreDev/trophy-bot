@@ -134,13 +134,13 @@ module.exports = {
 		if (emoji != current.emoji) 		changes.push(`**Emoji:** ${current.emoji} > ${emoji}`);
 		// if (value != current.value) 		changes.push(`**Value:** ${current.value} > ${value}`);
 		if (dedic) 							changes.push(`**Dedication:** ${current.dedication.name ? current.dedication.name : `No dedication`} > ${dedication.name}`);
-		if (tradeable != current.tradeable) changes.push(`**Tradeability:** ${current.tradeable} > ${tradeable}`);
 		if (details != current.details) 	changes.push(`**Details changed**`);
 		if (image != current.image) 		changes.push(`**Changed image**`);
+		
 
 		if (!changes.length){
 			embed.setColor(color.error);
-			embed.setDescription(`${emojis.error} No changes were made to **${current}**`);
+			embed.setDescription(`${emojis.error} No changes were made to **${current.name}**`);
 
 			return interaction.editReply({
 				embeds: [embed]	

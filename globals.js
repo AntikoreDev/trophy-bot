@@ -1,9 +1,11 @@
-const { EmbedBuilder, Collection } = require('discord.js');
+const { EmbedBuilder, Collection, ActivityType } = require('discord.js');
 
 const fetch = require('node-fetch');
 const { writeFile } = require('fs');
 const { promisify } = require('util');
 const writeFilePromise = promisify(writeFile);
+
+const random = require('rngoose');
 
 const fs = require('fs');
 
@@ -434,11 +436,35 @@ async function getServer(client, id, guild){
 }
 
 async function changeActivity(client){
+	await client.user.setActivity({ name: 'Starting up!', type: ActivityType.Watching });
+	await sleep(10000);
+
 	while (true){
-		await sleep(20000);
+		const activityName = getRandomActivity(client, client.db.bot.get(`data`));
 	
 		// Set the client user's activity.
-		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`) ?? 0} awarded trophies!`, { type: 'WATCHING' });
+		await client.user.setActivity({ name: activityName, type: ActivityType.Watching });
+		await sleep(60000);
+	}
+}
+
+function getRandomActivity(client, data){
+	try {
+		const list = [
+			`${data.trophiesAwarded ?? 0} awarded trophies!`,
+			`${data.trophies ?? 0} trophies created!`,
+			`${data.commands.total ?? 0} commands ${random.choice(['executed', 'ran', 'used'])}!`,
+			`${random.choice(['Serving', 'Helping', 'Running at'])} ${client.guilds.cache.size ?? 0} servers!`,
+			`${random.choice(['Serving', 'Helping', 'Working for'])} ${client.users.cache.size ?? 0} users!`,
+			`Running seamlessly ${timeFormat(client.uptime)}`,
+			`Invite me with '/invite'`,
+			`We are the champion`,
+		];
+
+		return random.choice(list);
+	}
+	catch (e) {
+		return `Working harder than expected!`;
 	}
 }
 
