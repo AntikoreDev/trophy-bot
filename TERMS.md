@@ -1,5 +1,6 @@
 # Terms of Service
 This software is provided "as is" without any warranty. Use at your own risk.
+
 By using [Trophy Bot](https://github.com/AntikoreDev/trophy-bot), you're implicitly agreeing with these terms, otherwise you should stop using it.
 
 ## List of terms
