@@ -30,7 +30,7 @@ async function imsafeWarning(interaction){
 	});
 }
 
-async function getDedication(guild, dedication, config){
+async function getDedication(guild, dedication, config = 0){
 	const name = dedication.name;
 	const id = dedication.user;
 
@@ -91,12 +91,12 @@ function isInServer(guild, user){
 	return guild.members.cache.get(user) != undefined;
 }
 
-// In very bad naming variables, please. discretion from the reader is thankful.
+// I'm very bad naming variables, please. discretion from the reader is thankful.
 function getSetting(client, guild, setting){
 	const stg = settings.find(x => x.id == setting);
 	if (!stg) return null;
 
-	const config = client.db.guilds.get(`data.${guild}.settings.${setting}`);
+	const config = null; // client.db.guilds.get(`data.${guild}.settings.${setting}`);
 	const set = config ?? stg.default;
 
 	return set;
@@ -333,18 +333,19 @@ async function fetchModules(dir, ext = '.js', command = false, first = true){
 
 		if (process.platform === "win32"){
 			for (const server of testingServers){
-				await rest.put(Routes.applicationGuildCommands('985903758607265832', server), { body: commands })
+				await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_USER, server), { body: commands })
 					.then()
 					.catch(console.error);
 			}
 		}else{
-			await rest.put(Routes.applicationCommands('985134052665356299'), { body: commands })
+			console.log("[Trophy Bot] Putting commands...");
+			await rest.put(Routes.applicationCommands(process.env.CLIENT_USER), { body: commands })
 				.then()
 				.catch(console.error);
 		}
 	
 
-		console.log('Commands updated!');
+		console.log('[Trophy Bot] Commands updated!');
 	}
 
 	collection.sort(a => a.name);
@@ -387,7 +388,7 @@ function isBanned(id){
 const supportServer = '985439832388042822';
 
 const testingServers = [
-	'985439832388042822'
+	supportServer
 ]
 
 
@@ -439,6 +440,7 @@ async function changeActivity(client){
 	await client.user.setActivity({ name: 'Starting up!', type: ActivityType.Watching });
 	await sleep(10000);
 
+	/*
 	while (true){
 		const activityName = getRandomActivity(client, client.db.bot.get(`data`));
 	
@@ -446,6 +448,7 @@ async function changeActivity(client){
 		await client.user.setActivity({ name: activityName, type: ActivityType.Watching });
 		await sleep(60000);
 	}
+	*/
 }
 
 function getRandomActivity(client, data){
