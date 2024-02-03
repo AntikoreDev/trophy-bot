@@ -2,7 +2,6 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color, emoji: emojis, parseUser, getTrophy, downloadImage } = require('../../globals');
 
 module.exports = {
-	permissions: ['manage_trophies'],
 	data: new SlashCommandBuilder()
 		.setName('edit')
 		.setDefaultMemberPermissions("32")

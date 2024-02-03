@@ -3,7 +3,6 @@ const { color, emoji, getTrophy, cleanseTrophies } = require('../../globals');
 const fs = require('fs');
 
 module.exports = {
-	permissions: ['manage_trophies'],
 	data: new SlashCommandBuilder()
 		.setName('delete')
 		.setDefaultMemberPermissions("32")

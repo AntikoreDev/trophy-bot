@@ -2,7 +2,6 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { emoji, color, updatePanel, showSuccess, showError } = require('../../globals');
 
 module.exports = {
-	permissions: ['manage_users'],
 	data: new SlashCommandBuilder()
 		.setDefaultMemberPermissions("32")
 		.setName('panel')

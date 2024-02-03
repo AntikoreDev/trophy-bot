@@ -2,7 +2,6 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { color, emoji: emojis, getPage } = require('../../globals');
 
 module.exports = {
-	permissions: ['manage_rewards'],
 	data: new SlashCommandBuilder()
 		.setName('rewards')
 		.setDefaultMemberPermissions("32")
