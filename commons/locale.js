@@ -1,10 +1,21 @@
 // ToDo
 const Database = require("./database.js");
 
-// This file should contain functions to manage using locales
-function getLocalisedString(guild, key, params = {}){
-
-	const lang = Database.getGuildLanguage(guild);
+/**
+ * Gets the localized version of the string with that kay, in the language of the provided guild.
+ * 
+ * @param {*} guild Guild that's going to read this string
+ * @param {*} key Locale key for the string
+ * @param {*} params Map of parameters to add into the string
+ * @param {*} language Language to force use of
+ * @returns Localized string
+ */
+async function getLocalisedString(guild, key, params = {}, language = null){
+	
+	let lang = language;
+	if (!lang){
+		lang = await Database.getGuildLanguage(guild);
+	}
 	
 	let locale = null;
 	try {
@@ -17,16 +28,16 @@ function getLocalisedString(guild, key, params = {}){
 			return "LANG_NULL";
 		}
 
-		return getLocalisedString(guild, "en", params);
+		return await getLocalisedString(guild, key, params, "en");
 	}
 
 	const value = locale?.entries[key] ?? null;
 	if (!value){
 		if (lang === "en"){
-			return "LOCALE_KEY_NULL";
+			return key;
 		}
 
-		return getLocalisedString(guild, "en", params);
+		return await getLocalisedString(guild, key, params, "en");
 	}
 
 	return getParametrizedKey(value, params);
@@ -34,8 +45,9 @@ function getLocalisedString(guild, key, params = {}){
 
 function getParametrizedKey(value, params = {}){
 	let text = value;
-	
-	for (const param of params.keys()){
+	const keys = Object.keys(params);
+
+	for (const param of keys){
 		const value = params[param];
 		while (text.includes(`%${param}%`)){
 			text = text.replace(`%${param}%`, value);
