@@ -4,6 +4,9 @@ const path = require('path');
 const Discord = require('discord.js');
 const Intents = Discord.GatewayIntentBits;
 
+const Utils = require('./commons/utils');
+const mongoose = require('mongoose');
+
 const client = new Discord.Client({
 	intents: [
 		Intents.GuildMessages,
@@ -15,15 +18,10 @@ const client = new Discord.Client({
 
 client.version = 0;
 
-const db = require('quick.db');
-
-client.db = {
-	bot: new db.table('bot'),
-	guilds: new db.table('guilds'),
-}
-
-// Require the token from the .env file
+// Require the variables from the .env file
 require("dotenv").config();
+
+console.log(`[Trophy Bot] Starting Up...`);
 
 // ========================================================
 // BOT EXECUTION
@@ -54,5 +52,10 @@ for (const file of eventFiles) {
 	}
 }
 
+// Connect to the database
+console.log(`[Trophy Bot] Connecting to database...`);
+mongoose.connect(Utils.getDBConnectionAddress()).then(c => console.log(`[Trophy Bot] Connected to MongoDB!`));
+
 // Login into the client
+console.log(`[Trophy Bot] Logging into Discord...`);
 client.login(process.env.DISCORD_TOKEN);
