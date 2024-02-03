@@ -6,7 +6,7 @@ module.exports = {
 	once: false,
 	async run (guild) {
 		
-		console.log(`Joined a new guild!`);
+		console.log(`[Trophy Bot] Added server!`);
 		await guild.members.fetch();
 		
 	}
