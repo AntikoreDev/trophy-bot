@@ -2,6 +2,7 @@
 const { fetchModules, changeActivity, AttemptToFetchUsers, updatePanels } = require('../globals.js');
 const path = require('path');
 const Discord = require('discord.js');
+const mongoose = require('mongoose');
 
 module.exports = {
 	name: 'ready',
@@ -26,26 +27,7 @@ module.exports = {
 		client.cooldowns = new Discord.Collection();
 
 		// Set the client user's activity.
-		await client.user.setActivity(`${client.db.bot.get(`data.trophiesAwarded`, 0) ?? 0} awarded trophies!`, { type: 'WATCHING' });
-
 		changeActivity(client);
 		updatePanels(client);
-
-		await AttemptToFetchUsers(client, true);
-
-		// Set the basic bot stuff
-		if (!client.db.bot.has(`data`)){
-			client.db.bot.set(`data`, {
-				version: client.version,
-
-				defaultLanguage: 'en',
-				bannedUsers: [],
-				commands: {
-					total: 0
-				},
-				trophies: 0,
-				trophiesAwarded: 0,
-			});
-		}
 	}
 }
