@@ -1,5 +1,7 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { color, emoji, getTrophy, doRewardRoles } = require('../../globals');
+const { color, emoji } = require("../../commons/statics");
+const Database = require("../../commons/database");
+const Utils = require("../../commons/utils");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,67 +14,54 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new EmbedBuilder();
+		const MIN = 1;
+		const MAX = 50;
 
-		const client = interaction.client;
 		const guild = interaction.guild.id;
 
-		const trophy = interaction.options?.get('trophy')?.value || null;
-		const user = interaction.options?.get('user')?.value || null;
-		const count = Math.floor(Math.max(interaction.options?.get('count')?.value || 1, 1));
+		const filter 	= interaction.options?.get('trophy')?.value;
+		const user 		= interaction.options?.get('user')?.value;
+		const count 	= Math.floor(Math.max(interaction.options?.get('count')?.value || MIN, MIN));
 
-		const id = await getTrophy(client, guild, trophy);
-		if (!id){
-			embed.setColor(color.error);
-			embed.setDescription(`${emoji.error} Could not find a trophy with the name or ID of \`${trophy}\``);
-
-			return interaction.editReply({
-				embeds: [embed]
-			});
+		const trophy = await Database.findTrophy(guild, filter);
+		if (!trophy){
+			const embed = await Utils.getError(guild, "error_generic_trophy_not_found", { filter });
+			return interaction.editReply({ embeds: [embed] });
 		}
 
-		const object = client.db.guilds.get(`data.${guild}.trophies.${id}`);
-		if (!object){
-			embed.setColor(color.error);
-			embed.setDescription(`${emoji.error} Could not find a trophy with the name or ID of \`${trophy}\``);
-
-			return interaction.editReply({
-				embeds: [embed]
-			});
+		const outrange = (count < MIN || count > MAX);
+		if (outrange){
+			const embed = await Utils.getError(guild, "error_revoke_amount", { min: MIN, max: MAX });
+			return interaction.editReply({ embeds: [embed] });
 		}
 
-		if (count < 0 || count > 50){
+		// Using negative count to remove instead of adding MWAHAHAHA!!
+		const success = await Database.revokeTrophy(guild, user, trophy, count);
 
-			embed.setColor(color.error);
-			embed.setDescription(`${emoji.error} You can only revoke between 0 and 50 trophies per command.`);
-			
-			return interaction.editReply({
-				embeds: [embed]
-			});
+		// -2: Thrown errors
+		if (success == -2){
+			const embed = await Utils.getError(guild, "error_revoke_generic");
+			return interaction.editReply({ embeds: [embed] });
 		}
 
-		const trophies = client.db.guilds.get(`data.${guild}.users.${user}.trophies`) || [];
-		const amount = trophies.filter(t => t === id).length;
-
-		const all = count >= amount;
-
-		const value = object.value * Math.min(count, amount);
-		let n = Math.min(count, amount);
-		while (n > 0){
-			
-			trophies.pop(id);
-			n--;
+		// -1: No existing awards for that user
+		if (success == -1){
+			const embed = await Utils.getError(guild, "error_revoke_no_trophies", { user: Utils.formatUser(user), trophy: Utils.formatTrophy(trophy) });
+			return interaction.editReply({ embeds: [embed] });
 		}
 
-		client.db.guilds.set(`data.${guild}.users.${user}.trophies`, trophies);
-		client.db.guilds.subtract(`data.${guild}.users.${user}.trophyValue`, value);
-
+		/*
 		try {
 			doRewardRoles(client, interaction.guild, user);
 		} catch {}
+		*/
+		
+		const embed = new EmbedBuilder();
 
+		const displayCount = (success == 0 ? "ALL" : success);
+		
 		embed.setColor(color.success);
-		embed.setDescription(`${emoji.success} Successfully removed **${all ? 'all' : count}** troph${count === 1 ? 'y' : 'ies'} of ${object.emoji} **${object.name}** from <@${user}>`);
+		embed.setDescription(`${emoji.success} Successfully removed **${displayCount}** troph${success === 1 ? 'y' : 'ies'} of ${Utils.formatTrophy(trophy)} from ${Utils.formatUser(user)}`);
 
 		interaction.editReply({
 			embeds: [embed]

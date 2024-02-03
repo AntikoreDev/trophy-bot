@@ -1,5 +1,7 @@
-const { EmbedBuilder, SlashCommandBuilder, Collection } = require('discord.js');
-const { color, emoji, sortmethods, getPage, parseUser, getSetting, anyIn } = require('../../globals');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const Database = require('../../commons/database');
+const Utils = require('../../commons/utils');
+const { color, emoji } = require('../../commons/statics');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -10,28 +12,19 @@ module.exports = {
 			.setDescription('Show the trophies any user has.')
 			.addUserOption(option => option.setName('user').setDescription('User to check trophies').setRequired(false))
 			.addIntegerOption(option => option.setName('page').setDescription('Page to look at').setRequired(false))
-			.addStringOption(option => option.setName('sorting').setDescription('How the trophies will sort').setRequired(false).addChoices(
-				...sortmethods.map(n => ({ name: n.name, value: n.id })),
-			))
 		)
 		.addSubcommand(subcommand => subcommand
-			.setName('guild')
-			.setDescription('Show the trophies any guild has.')
+			.setName('server')
+			.setDescription('Show the trophies the server has.')
 			.addIntegerOption(option => option.setName('page').setDescription('Page to look at').setRequired(false))
-			.addStringOption(option => option.setName('sorting').setDescription('How the trophies will sort').setRequired(false).addChoices(
-				...sortmethods.map(n => ({ name: n.name, value: n.id })),
-			))
 		),
 
 	async run (interaction) {
 
-		const embed = new EmbedBuilder();
-		
-		const client = interaction.client;
 		const guild = interaction.guild.id;
-
 		const subcommand = interaction.options?.getSubcommand();
 
+		/*
 		if (subcommand === 'user'){
 
 			const user = interaction.options?.get('user')?.value || interaction.user.id;
@@ -93,19 +86,68 @@ module.exports = {
 			return interaction.editReply({
 				embeds: [embed]
 			});
+		}*/
+
+		if (subcommand === 'user'){
+			
+			const user = interaction.options?.get('user')?.value || interaction.user.id;
+			const page = Math.floor(Math.max(interaction.options?.get('page')?.value || 1, 1));
+
+			const { items, currentpage, pagecount, count, total } = await Database.getTrophyUserList(guild, user, page);
+
+			const list = [];
+			for (const trophy of items){
+				const v = Utils.formatValue(trophy.value);
+				const valueString = (trophy.value != 0 ? ` · **(${v})**` : ``);
+
+				list.push(`${trophy.emoji} ${trophy.name}${valueString}`);
+			}
+
+			const name = await Utils.getUserNameByID(interaction.client, user);
+			const embed = new EmbedBuilder();
+
+			embed.setColor(color.main);
+			embed.setTitle(`${emoji.trophy} ${name}'s Trophies`);
+			embed.addFields({ name: 'List of Trophies', value: (total > 0 ? list.join('\n') : 'No trophies yet :c') });
+
+			embed.setFooter({ 
+				text: `Page ${currentpage} of ${pagecount}`,
+			});
+
+			return interaction.editReply({
+				embeds: [embed]
+			});
 		}
 		
-		if (subcommand === 'guild'){
+		if (subcommand === 'server'){
 
 			const page = Math.floor(Math.max(interaction.options?.get('page')?.value || 1, 1));
-			const object = client.db.guilds.get(`data.${guild}.trophies`);
-			const trophies = Object.keys(object).filter(x => x != 'current');
+			const { items, currentpage, pagecount, count } = await Database.getTrophyList(guild, page);
 
-			const sorted = trophies.sort(
-				(a, b) => {
-					return object[b].value - object[a].value;
-				});
+			const list = [];
+			for (const trophy of items){
+				const v = Utils.formatValue(trophy.value);
+				const valueString = (trophy.value != 0 ? ` · **(${v})**` : ``);
 
+				list.push(`${trophy.emoji} ${trophy.name}${valueString}`);
+			}
+
+			const embed = new EmbedBuilder();
+
+			embed.setColor(color.main);
+			embed.setTitle(`${emoji.trophy} Server Trophies`);
+			embed.setDescription(`_**${count}** trophies created_`);
+			embed.addFields({ name: 'List of Trophies', value: (count > 0 ? list.join('\n') : 'No trophies yet :c') });
+
+			embed.setFooter({ 
+				text: `Page ${currentpage} of ${pagecount}`,
+			});
+
+			return interaction.editReply({
+				embeds: [embed]
+			});
+
+			/*
 			const permroles = client.db.guilds.get(`data.${guild.id}.permissions.manage_trophies`) ?? [];
 			const roles = interaction.member.roles.cache.map(role => role.id);
 			
@@ -153,6 +195,7 @@ module.exports = {
 			return interaction.editReply({
 				embeds: [embed]
 			});
+			*/
 		}
 	}
 }

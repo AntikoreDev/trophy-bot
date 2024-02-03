@@ -1,5 +1,9 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { color, emoji, getTrophy, cleanseTrophies } = require('../../globals');
+
+const { color, emoji } = require('../../commons/statics');
+const Utils = require("../../commons/utils");
+const Database = require("../../commons/database");
+
 const fs = require('fs');
 
 module.exports = {
@@ -11,43 +15,33 @@ module.exports = {
 
 	async run (interaction) {
 
-		const embed = new EmbedBuilder();
 		
-		const client = interaction.client;
+		// Get the current guild's snowflake
 		const guild = interaction.guild.id;
 
-		const trophy = interaction.options?.get('trophy')?.value || null;
-		
-		const id = await getTrophy(client, guild, trophy);
+		// Get the specified trophy
+		const filter = interaction.options?.get('trophy')?.value;
+		const trophy = await Database.findTrophy(guild, filter);
 
-		if (!id){
-			embed.setColor(color.error);
-			embed.setDescription(`${emoji.error} Could not find a trophy with the name or ID of \`${trophy}\``);
-
-			return interaction.editReply({
-				embeds: [embed]
-			});
+		// If trophy doesn't exist, throw error
+		if (!trophy){
+			const embed = await Utils.getError(guild, "error_generic_trophy_not_found", { filter });
+			return interaction.editReply({ embeds: [embed] });
 		}
 
-		const object = client.db.guilds.get(`data.${guild}.trophies.${id}`);
-		const value = object?.value;
-		const name = object?.name;
-		const image = object?.image;
-		const icon = object?.emoji;
+		// Attempt to delete the trophy
+		const results = await Database.deleteTrophy(guild, trophy.id);
 
-		client.db.guilds.delete(`data.${guild}.trophies.${id}`);
-
-		const trophies = (client.db.bot.get(`data.trophies`) ?? 0);
-		client.db.bot.set(`data.trophies`, Math.max(0, trophies - 1));
-
-		// Remove trophy from the users who have it
-		await cleanseTrophies(client, guild, id, value);
+		// If trophy deletion gone wrong, throw error
+		if (!results){
+			const embed = await Utils.getError(guild, "error_delete_generic", { filter });
+			return interaction.editReply({ embeds: [embed] });
+		}
+		
+		const embed = new EmbedBuilder();
 
 		embed.setColor(color.success);
-		embed.setDescription(`${emoji.success} Sucessfully **deleted** trophy ${icon} **${name}**`);
-
-		// Delete the trophy image if it exists
-		fs.unlink(`./images/${image}`, (err) => {});
+		embed.setDescription(`${emoji.success} Sucessfully **deleted** trophy ${Utils.formatTrophy(trophy)}`);
 
 		return interaction.editReply({
 			embeds: [embed]
