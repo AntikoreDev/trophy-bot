@@ -12,7 +12,6 @@ module.exports = {
 		console.log(`[Trophy Bot] Fetching dump channels...`);
 		try {
 			client.errorChannel = await client.channels.fetch("985869722199416862").then();
-			client.suggestionChannel = await client.channels.fetch("985872094153830400").then();
 		} catch (e) {
 			console.log(`[Trophy Bot] ERROR: Couldn't fetch error channel`);
 		}
