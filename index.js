@@ -52,10 +52,8 @@ for (const file of eventFiles) {
 	}
 }
 
-// Connect to the database
-console.log(`[Trophy Bot] Connecting to database...`);
-mongoose.connect(Utils.getDBConnectionAddress()).then(c => console.log(`[Trophy Bot] Connected to MongoDB!`));
-
-// Login into the client
-console.log(`[Trophy Bot] Logging into Discord...`);
-client.login(process.env.DISCORD_TOKEN);
+// Connect to MongoDB and Discord
+(async () => {
+	await Utils.connectMongoDB();
+	await Utils.connectDiscord();
+})

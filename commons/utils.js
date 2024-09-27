@@ -51,8 +51,26 @@ function formatValue(value){
 	return (value > 0 ? `+${value}` : value);
 }
 
-function getDBConnectionAddress(){
-	return `mongodb://${process.env.MONGO_IP}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`;
+async function connectMongoDB(){
+	const user = process.env.MONGO_USER;
+	const pass = process.env.MONGO_PASS;
+	const host = process.env.MONGO_HOST;
+	const port = process.env.MONGO_PORT;
+
+	const dbName = process.env.MONGO_DBNAME;
+
+	const connectionURI = `mongodb://${host}:${port}`;
+
+	console.log(`[Trophy Bot] Connecting to database ${dbName} at "${host}:${port}"...`);
+
+	return await mongoose.connect(connectionURI, { pass, user, dbName })
+		.then(() => console.log(`[Trophy Bot] Connected to database ${dbName} at "${host}:${port}"!`))
+		.catch(error => console.log(error));
+}
+
+async function connectDiscord(){
+	console.log(`[Trophy Bot] Logging into Discord...`);
+	client.login(process.env.DISCORD_TOKEN);
 }
 
 async function getUserNameByID(client, id){
@@ -60,5 +78,5 @@ async function getUserNameByID(client, id){
 }
 
 module.exports = {
-	getMedal, getError, getSuccess, formatUser, formatTrophy, formatLanguage, formatValue, getLanguageByID, getDBConnectionAddress, getUserNameByID
+	getMedal, getError, getSuccess, formatUser, formatTrophy, formatLanguage, formatValue, getLanguageByID, connectMongoDB, connectDiscord, getUserNameByID
 }

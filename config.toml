@@ -1,0 +1,10 @@
+[main]
+environment = "dev" # Development 'dev' or production 'prod'
+dev_servers = [] # Servers to set guild slash commands when the environment is 'dev'
+
+default_language = "en"
+
+[restrictions]
+ignore_all = false
+
+max_trophies = 150
