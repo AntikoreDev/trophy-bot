@@ -1,5 +1,8 @@
 // ToDo
 const Database = require("./database.js");
+const Log = require("./logger.js");
+
+Log.i("Initializing module 'locale'");
 
 /**
  * Gets the localized version of the string with that kay, in the language of the provided guild.

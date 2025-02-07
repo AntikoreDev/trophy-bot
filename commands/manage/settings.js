@@ -1,7 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { color, emoji, settings, parseName, checkName } = require('../../globals');
-
-const available = settings.map(n => n.id);
+const settings = [];
 
 module.exports = {
 	data: new SlashCommandBuilder()

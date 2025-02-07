@@ -1,35 +1,62 @@
 // This event runs whenever the bot is ready to start working!
-const { fetchModules, changeActivity, AttemptToFetchUsers, updatePanels } = require('../globals.js');
+// const { fetchModules, changeActivity, updatePanels } = require('../globals.js');
 const path = require('path');
-const Discord = require('discord.js');
-const mongoose = require('mongoose');
+const modules = require('../commons/modules.js');
+const Log = require('../commons/logger.js');
+const REST = require('@discordjs/rest').REST;
+const { Routes } = require('discord-api-types/v9');
+const instance = require('../commons/instance.js');
 
 module.exports = {
 	name: 'ready',
 	once: true,
 	async run (client) {
 
-		console.log(`[Trophy Bot] Fetching dump channels...`);
+		Log.i(`Fetching dump channels...`);
 		try {
 			client.errorChannel = await client.channels.fetch("985869722199416862").then();
 		} catch (e) {
-			console.log(`[Trophy Bot] ERROR: Couldn't fetch error channel`);
+			Log.e(`Couldn't fetch error channel`);
 		}
 
-		console.log(`[Trophy Bot] Reading commands and locales...`);
+		Log.i(`Reading commands and locales...`);
 
 		// Import all the modules
-		client.commands 	= await fetchModules(path.join(__dirname, '../commands'), '.js', true);
-		client.languages 	= await fetchModules(path.join(__dirname, '../locale/languages'));
+		client.commands 	= await modules.fetch(path.join(__dirname, '../commands'), '.js');
+		client.languages 	= await modules.fetch(path.join(__dirname, '../locale/languages'), '.js');
 		
 		// Set the bot's status
-		console.log(`[Trophy Bot] Done!`);
-		console.log(`[Trophy Bot] Running as ${client.user.username}#${client.user.discriminator} with ID ${client.user.id}`);
+		Log.i(`Loaded ${client.commands.size} commands and ${client.languages.size} languages`);
+		Log.i(`Running as ${client.user.username}#${client.user.discriminator} with ID ${client.user.id}`);
+		
+		await sendCommands(client);
 
-		client.cooldowns = new Discord.Collection();
+		// client.cooldowns = new Discord.Collection();
 
 		// Set the client user's activity.
-		changeActivity(client);
-		updatePanels(client);
+		// changeActivity(client);
+		// updatePanels(client);
 	}
+}
+
+async function sendCommands(client){
+	const testingServers = await instance.get("main", "dev_servers");
+	const environment = await instance.get("main", "environment");
+	const commands = client.commands.map(command => {
+		return command.data.toJSON();
+	});
+
+	const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
+
+	if (environment === "dev"){
+		for (const server of testingServers){
+			await rest.put(Routes.applicationGuildCommands(client.user.id, server), { body: commands })
+				.then()
+				.catch(console.error);
+		}
+		return;
+	}
+
+	Log.i("Putting commands...");
+	await rest.put(Routes.applicationCommands(client.user.id), { body: commands }).then();
 }

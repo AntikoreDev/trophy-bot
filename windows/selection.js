@@ -2,9 +2,8 @@
 This window should be called whenever a /show command is used and the filter returns more than one results
 */
 
-const { EmbedBuilder, parseEmoji, ButtonStyle } = require("discord.js");
+const { EmbedBuilder, parseEmoji, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js");
 const { color } = require("../commons/statics");
-const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js/src");
 const Database = require('../commons/database');
 const { getDedication } = require("../globals");
 

@@ -1,5 +1,5 @@
 const Database = require("../commons/database");
-const { getServer, anyIn, color, emoji, isDev, AttemptToFetchUsers, imsafeWarning } = require("../globals");
+const { color, emoji } = require("../commons/statics.js");
 const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
@@ -37,7 +37,6 @@ module.exports = {
 			// If the error channel exists, send a log with the issue
 			if (client.errorChannel !== null){
 				try {
-	
 					const stack = error.stack.slice(0, 900) + "...";
 					
 					const embed = new EmbedBuilder();

@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const { color } = require('../../commons/statics');
 const Utils = require('../../commons/utils');

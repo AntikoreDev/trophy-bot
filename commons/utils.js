@@ -1,6 +1,10 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const { color, emoji, medals } = require("./statics");
 const Locale = require("./locale");
+const Log = require("./logger");
+const mongoose = require("mongoose");
+
+Log.i("Initializing module 'utils'");
 
 function getMedal(i){
 	return (medals[i] || medals["x"]);
@@ -52,6 +56,8 @@ function formatValue(value){
 }
 
 async function connectMongoDB(){
+	Log.i("Initializing database connection...");
+
 	const user = process.env.MONGO_USER;
 	const pass = process.env.MONGO_PASS;
 	const host = process.env.MONGO_HOST;
@@ -61,21 +67,23 @@ async function connectMongoDB(){
 
 	const connectionURI = `mongodb://${host}:${port}`;
 
-	console.log(`[Trophy Bot] Connecting to database ${dbName} at "${host}:${port}"...`);
+	Log.i(`Connecting to database ${dbName} at "${host}:${port}"...`);
 
 	return await mongoose.connect(connectionURI, { pass, user, dbName })
-		.then(() => console.log(`[Trophy Bot] Connected to database ${dbName} at "${host}:${port}"!`))
-		.catch(error => console.log(error));
+		.then(() => Log.i(`Connected to database ${dbName} at "${host}:${port}"!`))
+		.catch(error => Log.e(error));
 }
 
-async function connectDiscord(){
-	console.log(`[Trophy Bot] Logging into Discord...`);
+async function connectDiscord(client){
+	Log.i(`Logging into Discord...`);
 	client.login(process.env.DISCORD_TOKEN);
 }
 
 async function getUserNameByID(client, id){
 	return await client.users.fetch(id).then(u => u.displayName);
 }
+
+Log.i("Initialized module 'utils'");
 
 module.exports = {
 	getMedal, getError, getSuccess, formatUser, formatTrophy, formatLanguage, formatValue, getLanguageByID, connectMongoDB, connectDiscord, getUserNameByID

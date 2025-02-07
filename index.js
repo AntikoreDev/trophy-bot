@@ -1,17 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
+const Log = require('./commons/logger');
+const Utils = require('./commons/utils');
+
 const Discord = require('discord.js');
 const Intents = Discord.GatewayIntentBits;
 
-const Utils = require('./commons/utils');
 const mongoose = require('mongoose');
 
 const client = new Discord.Client({
 	intents: [
 		Intents.GuildMessages,
 		Intents.GuildMembers,
-		Intents.GuildEmojisAndStickers,
 		Intents.Guilds
 	]
 });
@@ -21,7 +22,7 @@ client.version = 0;
 // Require the variables from the .env file
 require("dotenv").config();
 
-console.log(`[Trophy Bot] Starting Up...`);
+Log.i(`Starting Up...`);
 
 // ========================================================
 // BOT EXECUTION
@@ -52,8 +53,12 @@ for (const file of eventFiles) {
 	}
 }
 
+Log.i(`Finished fetching events`);
+
 // Connect to MongoDB and Discord
-(async () => {
+async function connect(){
 	await Utils.connectMongoDB();
-	await Utils.connectDiscord();
-})
+	await Utils.connectDiscord(client);
+};
+
+connect();

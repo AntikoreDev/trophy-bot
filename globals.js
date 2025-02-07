@@ -1,6 +1,7 @@
+/*
 const { EmbedBuilder, Collection, ActivityType } = require('discord.js');
 
-const fetch = require('node-fetch');
+const axios = require('axios');
 const { writeFile } = require('fs');
 const { promisify } = require('util');
 const writeFilePromise = promisify(writeFile);
@@ -440,7 +441,6 @@ async function changeActivity(client){
 	await client.user.setActivity({ name: 'Starting up!', type: ActivityType.Watching });
 	await sleep(10000);
 
-	/*
 	while (true){
 		const activityName = getRandomActivity(client, client.db.bot.get(`data`));
 	
@@ -448,7 +448,6 @@ async function changeActivity(client){
 		await client.user.setActivity({ name: activityName, type: ActivityType.Watching });
 		await sleep(60000);
 	}
-	*/
 }
 
 function getRandomActivity(client, data){
@@ -490,7 +489,7 @@ async function AttemptToFetchUsers(client, force = false){
 
 
 function downloadImage(url, filename){
-	return fetch(url)
+	return axios.get(url)
 		.then(x => x.arrayBuffer())
 		.then(x => writeFilePromise(filename, Buffer.from(x)));
 };
@@ -718,3 +717,4 @@ module.exports = {
 	// Colors, emojis, etc.
 	color, emoji, booleans, testingServers, settings, supportServer, sortmethods
 }
+*/
