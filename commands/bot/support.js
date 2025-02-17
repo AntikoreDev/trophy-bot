@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { color } = require('../../globals');
+const { color } = require('../../commons/statics.js');
 const Locale = require(`../../commons/locale.js`);
 
 module.exports = {
@@ -20,9 +20,8 @@ module.exports = {
 		embed.setTitle(`:question: ${locale.title}`);
 		embed.setDescription(
 			`You can get help in our [Support Server](https://discord.gg/kNmgU44xgU)\n\n` +
-			`You can also report bugs on [Github](https://github.com/Aidanete/trophy-bot/issues)\n` +
-			`Or suggest stuff with **/suggest**.`
-		)
+			`You can also report bugs on [Github](https://github.com/AntikoreDev/trophy-bot/issues)\n`
+		);
 
 		if (!interaction) return;
 		return interaction.editReply({

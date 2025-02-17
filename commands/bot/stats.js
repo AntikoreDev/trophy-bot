@@ -1,5 +1,6 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { color, timeFormat } = require('../../globals');
+const { color } = require('../../commons/statics.js');
+const { timeFormat } = require('../../commons/utils.js');
 
 module.exports = {
 	cooldown: 10,
@@ -31,10 +32,10 @@ module.exports = {
 			name: `Trophies`,
 			inline: true,
 			value:
-				`**Commands:** ${commands}\n` + 
-				`**Runs:** ${client.db.bot.get(`data.commands.total`) ?? 0} :gear:\n` +
-				`**Trophies:** ${client.db.bot.get(`data.trophies`) ?? 0} :trophy:\n` +
-				`**Awards:** ${client.db.bot.get(`data.trophiesAwarded`) ?? 0} :medal:\n`
+				`**Commands:** ${commands}\n`
+				//`**Runs:** ${client.db.bot.get(`data.commands.total`) ?? 0} :gear:\n` +
+				//`**Trophies:** ${client.db.bot.get(`data.trophies`) ?? 0} :trophy:\n` +
+				//`**Awards:** ${client.db.bot.get(`data.trophiesAwarded`) ?? 0} :medal:\n`
 			}
 		);
 

@@ -369,7 +369,7 @@ async function deleteTrophy(guild, trophy){
 async function getTrophyList(guild, page = 1){
 
 	const criteria = { guild };
-	const count = await Trophies.find(criteria).count().exec();
+	const count = await Trophies.find(criteria).countDocuments();
 
 	const perPage = 10;
 	const pagecount = Math.ceil(count / perPage);
@@ -383,7 +383,7 @@ async function getTrophyList(guild, page = 1){
 
 async function getTrophyUserList(guild, user, page = 1){
 	const criteria = { guild, user };
-	const individualCount = await Awards.find(criteria).count().exec();
+	const individualCount = await Awards.find(criteria).countDocuments();
 	const count = await Awards.aggregate([
 		{
 			$match: {
@@ -405,7 +405,7 @@ async function getTrophyUserList(guild, user, page = 1){
 	const actualPage = Math.max(Math.min(page, pagecount), 1);
 	const skipped = ((actualPage - 1) * perPage);
 
-	/*const list = await Awards.aggregate([
+	const list = await Awards.aggregate([
 		{
 			$match: criteria
 		},
@@ -419,13 +419,13 @@ async function getTrophyUserList(guild, user, page = 1){
 		},
 		{
 			$addFields: {
-				emoji: { $add: '$trophydefs.emoji' },
-				name: { $add: '$trophydefs.name' },
-				value: { $add: '$trophydefs.value' },
-				count: { $add: '$awards.count' }
+				emoji: '$trophydefs.emoji',
+				name: '$trophydefs.name',
+				value:' $trophydefs.value',
+				count: '$awards.count'
 			}
 		}
-	]).sort({ value: -1, name: 1 }).skip(skipped).limit(perPage).exec();*/
+	]).sort({ value: -1, name: 1 }).skip(skipped).limit(perPage).exec();
 
 	return { items: list, currentpage: actualPage, pagecount, count: individualCount.total, total: count };
 }

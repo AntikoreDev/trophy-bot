@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { color } = require('../../globals');
+const { color } = require('../../commons/statics.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()

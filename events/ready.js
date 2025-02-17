@@ -23,7 +23,7 @@ module.exports = {
 
 		// Import all the modules
 		client.commands 	= await modules.fetch(path.join(__dirname, '../commands'), '.js');
-		client.languages 	= await modules.fetch(path.join(__dirname, '../locale/languages'), '.js');
+		client.languages 	= await modules.fetchLanguages(path.join(__dirname, '../locale/languages'), '.js');
 		
 		// Set the bot's status
 		Log.i(`Loaded ${client.commands.size} commands and ${client.languages.size} languages`);

@@ -1,6 +1,6 @@
 [main]
 environment = "dev" # Development 'dev' or production 'prod'
-dev_servers = [ ] # Servers to set guild slash commands when the environment is 'dev'
+dev_servers = [ "985439832388042822" ] # Servers to set guild slash commands when the environment is 'dev'
 
 default_language = "en"
 
@@ -9,3 +9,7 @@ ignore_all = false
 
 max_trophies = 150
 max_filesize = 1024 # In Kilobytes
+
+max_awards = 0
+max_awards_per_command = 50
+max_revokes_per_command = 50

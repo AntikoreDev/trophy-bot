@@ -1,5 +1,6 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { color, emoji: emojis, parseUser, downloadImage, getTrophyCount, showError } = require('../../globals');
+const { color, emoji: emojis } = require('../../commons/statics');
+
 const Database = require('../../commons/database');
 const { Trophies } = require('../../commons/models');
 
@@ -30,7 +31,7 @@ module.exports = {
 			
 			const embed = new EmbedBuilder()
 				.setColor(color.error)
-				.setDescription(showError(`You have reached the limit of 150 trophies per guild :(`));
+				.setDescription(`You have reached the limit of 150 trophies per guild :(`);
 				
 			return interaction.editReply({
 				embeds: [embed]
@@ -65,7 +66,7 @@ module.exports = {
 		// If details are too long
 		if (def.details && def.details.length > 300){
 			embed.setColor(color.error);
-			embed.setDescription(showError("The details are too long"));
+			embed.setDescription(("The details are too long"));
 
 			return interaction.editReply({
 				embeds: [embed]
@@ -114,6 +115,7 @@ module.exports = {
 	
 		let dedication = undefined;
 
+		/*
 		// If there is a dedicated user, set it, else, ignore it
 		if (def.dedic){
 
@@ -137,6 +139,7 @@ module.exports = {
 				}
 			}
 		}
+		*/
 	
 		const next = await Database.getNextTrophyID(guild);
 		const trophy = {

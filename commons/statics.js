@@ -1,5 +1,5 @@
 const color = {
-	main: 0x225C8F,
+	main: 0x2E64D0,
 	error: 0xE02D44,
 	success: 0x32CD32
 };

@@ -83,8 +83,23 @@ async function getUserNameByID(client, id){
 	return await client.users.fetch(id).then(u => u.displayName);
 }
 
+function timeFormat(ms) {
+    let seconds = ms / 1000;
+
+	const days = parseInt(seconds / 86400);
+	seconds = seconds % 86400;
+
+    const hours = parseInt(seconds / 3600);
+    seconds = seconds % 3600;
+
+    const minutes = parseInt(seconds / 60);
+    seconds = seconds % 60;
+
+    return `${days > 0 ? `${days}d` : ''} ${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m ` : ''}${Math.floor(seconds)}s `.trim();
+}
+
 Log.i("Initialized module 'utils'");
 
 module.exports = {
-	getMedal, getError, getSuccess, formatUser, formatTrophy, formatLanguage, formatValue, getLanguageByID, connectMongoDB, connectDiscord, getUserNameByID
+	getMedal, getError, getSuccess, formatUser, formatTrophy, formatLanguage, formatValue, getLanguageByID, connectMongoDB, connectDiscord, getUserNameByID, timeFormat
 }
